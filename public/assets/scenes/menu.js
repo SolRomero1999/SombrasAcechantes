@@ -3,10 +3,6 @@ export default class Menu extends Phaser.Scene {
       super("menu");
     }
   
-    preload() {
-      this.load.image("Menu", "./public/assets/images/Menu.png");
-    }
-  
     create() {
       const menuImage = this.add.image(0, this.scale.height / 2, "Menu").setOrigin(0, 0.5);
       menuImage.setScale(2.5);

@@ -3,10 +3,6 @@ export default class SeleccionNivel extends Phaser.Scene {
     super("SeleccionNivel");
   }
 
-  preload() {
-    this.load.image("carrito", "./public/assets/images/carrito.png");
-  }
-
   create() {
     const carritoScale = 5; // Escala de tamaño del carrito
     const carritoY = this.scale.height / 2; // Posición Y centrada de los carritos

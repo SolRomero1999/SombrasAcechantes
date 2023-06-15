@@ -3,38 +3,7 @@ export default class nivel1 extends Phaser.Scene {
     super("nivel1");
   }
 
-  preload() {
-    // Cargar los recursos
-    this.load.tilemapTiledJSON("map", "./public/tilemaps/nivel1.json");
-    this.load.image("tilesFondo", "./public/assets/images/fondo.png");
-    this.load.image("tilesPlataforma", "./public/assets/images/platform.png");
-    this.load.image("salida", "./public/assets/images/salida.png");
-    this.load.spritesheet("dude", "./public/assets/images/personaje.png", {
-      frameWidth: 210,
-      frameHeight: 378,
-    });
-  }
-
   create() {
-    // Animaciones del jugador: girar a la izquierda, girar a la derecha, quieto
-    this.anims.create({
-      key: "left",
-      frames: this.anims.generateFrameNumbers("dude", { start: 0, end: 3 }),
-      frameRate: 10,
-      repeat: -1,
-    });
-    this.anims.create({
-      key: "turn",
-      frames: [{ key: "dude", frame: 4 }],
-      frameRate: 20,
-    });
-    this.anims.create({
-      key: "right",
-      frames: this.anims.generateFrameNumbers("dude", { start: 5, end: 8 }),
-      frameRate: 10,
-      repeat: -1,
-    });
-
     const map = this.make.tilemap({ key: "map" });
 
     // Cargar las capas de tiles: fondo y plataformas
@@ -76,9 +45,10 @@ export default class nivel1 extends Phaser.Scene {
     }
 
     if (this.cursors.up.isDown && this.jugador.body.blocked.down) {
-      this.jugador.setVelocityY(-330);
+      this.jugador.setVelocityY(-100); // Ajusta este valor para reducir la altura del salto
     }
   }
 }
+
 
 
