@@ -8,8 +8,8 @@ import nivel3 from "./public/assets/scenes/nivel3.js";
 // Create a new Phaser config object
 const config = {
   type: Phaser.AUTO,
-  width: 800,
-  height: 600,
+  width: 1650,
+  height: 900,
   scale: {
     mode: Phaser.Scale.FIT,
     autoCenter: Phaser.Scale.CENTER_BOTH,
