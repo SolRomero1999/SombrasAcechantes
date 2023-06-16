@@ -15,7 +15,6 @@ export default class nivel1 extends Phaser.Scene {
     const objectosLayer = map.getObjectLayer("objetos");
     plataformaLayer.setCollisionByProperty({ colision: true });
 
-
     // Crear al jugador
     const spawnPoint = map.findObject("objetos", (obj) => obj.name === "jugador");
     this.jugador = this.physics.add.sprite(spawnPoint.x, spawnPoint.y, "dude");
@@ -26,17 +25,31 @@ export default class nivel1 extends Phaser.Scene {
 
     // Crear la salida
     const spawnPointSalida = map.findObject("objetos", (obj) => obj.name === "salida");
-    this.salida = this.physics.add.sprite(spawnPointSalida.x, spawnPointSalida.y, "salida").setScale(0.1);
-
+    this.salida = this.physics.add.sprite(spawnPointSalida.x, spawnPointSalida.y, "salida").setScale(1.8);
     this.physics.add.collider(this.jugador, plataformaLayer);
     this.physics.add.collider(this.salida, plataformaLayer);
+
+    // Crear el carrito
+    const spawnPointCarrito = map.findObject("objetos", (obj) => obj.name === "carrito");
+    this.Carrito = this.physics.add.sprite(spawnPointCarrito.x, spawnPointCarrito.y, "carrito").setScale(1);
+    this.physics.add.collider(this.Carrito, plataformaLayer);
+    this.physics.add.collider(this.jugador, this.Carrito);
+
+    // Habilitar el sistema de físicas para el carrito
+  this.physics.world.enable(this.Carrito);
+
+    // Establecer las propiedades físicas del carrito
+  this.Carrito.body.setMass(4);  // Aumentar la masa para hacerlo más pesado
+  this.Carrito.body.setFriction(3);  // Aumentar la fricción para hacerlo más difícil de mover
   }
 
   update() {
     if (this.cursors.left.isDown) {
+      // Ajustar la velocidad horizontal para un salto lateral constante
       this.jugador.setVelocityX(-160);
       this.jugador.anims.play("left", true);
     } else if (this.cursors.right.isDown) {
+      // Ajustar la velocidad horizontal para un salto lateral constante
       this.jugador.setVelocityX(160);
       this.jugador.anims.play("right", true);
     } else {
@@ -45,10 +58,8 @@ export default class nivel1 extends Phaser.Scene {
     }
 
     if (this.cursors.up.isDown && this.jugador.body.blocked.down) {
-      this.jugador.setVelocityY(-100); // Ajusta este valor para reducir la altura del salto
+      // Ajustar la velocidad vertical para un salto más alto
+      this.jugador.setVelocityY(-140); // Ajusta este valor para aumentar la altura del salto
     }
   }
 }
-
-
-

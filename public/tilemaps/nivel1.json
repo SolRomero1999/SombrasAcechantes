@@ -87,6 +87,18 @@
          "objects":[
                 {
                  "height":0,
+                 "id":15,
+                 "name":"carrito",
+                 "point":true,
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":598,
+                 "y":772
+                }, 
+                {
+                 "height":0,
                  "id":11,
                  "name":"salida",
                  "point":true,
@@ -94,8 +106,8 @@
                  "type":"",
                  "visible":true,
                  "width":0,
-                 "x":1307.50337381916,
-                 "y":816.445344129554
+                 "x":1309.50337381916,
+                 "y":728.445344129554
                 }, 
                 {
                  "height":0,
@@ -115,8 +127,8 @@
          "x":0,
          "y":0
         }],
- "nextlayerid":4,
- "nextobjectid":15,
+ "nextlayerid":5,
+ "nextobjectid":18,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.10.1",
