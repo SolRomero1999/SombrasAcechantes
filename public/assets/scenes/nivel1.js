@@ -25,7 +25,8 @@ export default class nivel1 extends Phaser.Scene {
 
     // Crear los pinchos
     const spawnPointpinchos = map.findObject("objetos", (obj) => obj.name === "pinchos");
-    this.pinchos = this.physics.add.sprite(spawnPointpinchos.x, spawnPointpinchos.y, "pinchos").setScale(0.7);
+    this.pinchos = this.physics.add.sprite(spawnPointpinchos.x, spawnPointpinchos.y, "pinchos").setScale(0.5);
+    this.pinchos.setImmovable(true); // Establecer como inamovible
     this.physics.add.collider(this.pinchos, plataformaLayer);
     this.physics.add.collider(this.jugador, this.pinchos, this.jugadorMuere, null, this);
 
@@ -35,49 +36,55 @@ export default class nivel1 extends Phaser.Scene {
     this.physics.add.collider(this.pico, plataformaLayer);
     this.physics.add.collider(this.jugador, this.pico, this.jugadorChocaConPico, null, this);
 
+    // Crear el muro
+    const spawnPointMuro = map.findObject("objetos", (obj) => obj.name === "muro");
+    this.muro = this.physics.add.sprite(spawnPointMuro.x, spawnPointMuro.y, "muro").setScale(1);
+    this.muro.setImmovable(true); // Establecer como inamovible
+    this.physics.add.collider(this.muro, plataformaLayer);
+    this.physics.add.collider(this.jugador, this.muro, this.jugadorChocaConMuro, null, this);
+
     // Crear el carrito
     const spawnPointCarrito = map.findObject("objetos", (obj) => obj.name === "carrito");
-    this.Carrito = this.physics.add.sprite(spawnPointCarrito.x, spawnPointCarrito.y, "carrito").setScale(1);
+    this.Carrito = this.physics.add.sprite(spawnPointCarrito.x, spawnPointCarrito.y, "carrito").setScale(1.4);
     this.physics.add.collider(this.Carrito, plataformaLayer);
+    this.physics.add.collider(this.Carrito, this.muro); // Establecer la colisión con el muro
     this.physics.add.collider(this.jugador, this.Carrito);
-
-    // Crear el muro
-    const spawnPointmuro = map.findObject("objetos", (obj) => obj.name === "muro");
-    this.muro = this.physics.add.sprite(spawnPointmuro.x, spawnPointmuro.y, "muro").setScale(1.1);
-    this.physics.add.collider(this.muro, plataformaLayer);
-    this.physics.add.collider(this.jugador, this.muro);
-
-    // Habilitar el sistema de físicas para el carrito
-    this.physics.world.enable(this.Carrito);
-
-    // Establecer las propiedades físicas del carrito
-    this.Carrito.body.setMass(4);  // Aumentar la masa para hacerlo más pesado
-    this.Carrito.body.setFriction(3);  // Aumentar la fricción para hacerlo más difícil de mover
+    this.jugadorEnContactoConCarrito = false;
 
     // Crear la salida
     const spawnPointSalida = map.findObject("objetos", (obj) => obj.name === "salida");
-    this.salida = this.physics.add.sprite(spawnPointSalida.x, spawnPointSalida.y, "salida").setScale(1);
+    this.salida = this.physics.add.sprite(spawnPointSalida.x, spawnPointSalida.y, "salida").setScale(0.9);
     this.physics.add.collider(this.jugador, plataformaLayer);
     this.physics.add.collider(this.salida, plataformaLayer);
 
-    // Condición para pasar de nivel 
+    // Condición para pasar de nivel
     this.physics.add.overlap(this.jugador, this.salida, this.pasarAlNivel2, null, this);
   }
 
   jugadorChocaConPico(jugador, pico) {
     pico.disableBody(true, true); // Desactiva el cuerpo físico y oculta el sprite
+    this.haRecogidoElPico = true;
   }
-  
+
+  jugadorChocaConMuro(jugador, muro) {
+    if (this.haRecogidoElPico) {
+      muro.disableBody(true, true); // Desactiva el cuerpo físico y oculta el sprite
+    } else {
+      // El jugador simplemente se detiene al chocar con el muro
+      jugador.setVelocityX(0);
+      jugador.setVelocityY(0);
+    }
+  }
 
   jugadorMuere() {
     // Lógica para la muerte del jugador
     console.log("¡El jugador murió!");
     this.scene.start("menu");
-  } 
+  }
 
   pasarAlNivel2() {
     this.scene.start("nivel2");
-  }  
+  }
 
   update() {
     if (this.cursors.left.isDown) {
@@ -94,8 +101,30 @@ export default class nivel1 extends Phaser.Scene {
     }
 
     if (this.cursors.up.isDown && this.jugador.body.blocked.down) {
-      // Ajustar la velocidad vertical para un salto más alto
-      this.jugador.setVelocityY(-140); // Ajusta este valor para aumentar la altura del salto
+      this.jugador.setVelocityY(-200); // Ajustar este valor para aumentar la altura del salto
     }
+
+    // Verificar si el jugador está en contacto con el carrito
+    if (this.physics.overlap(this.jugador, this.Carrito)) {
+      this.jugadorEnContactoConCarrito = true;
+    } else {
+      this.jugadorEnContactoConCarrito = false;
+    }
+
+    // Mover el carrito solo si el jugador está en contacto con él
+    if (this.jugadorEnContactoConCarrito) {
+      if (this.cursors.left.isDown) {
+        // Ajustar la velocidad horizontal para un movimiento lateral constante
+        this.Carrito.setVelocityX(-160);
+      } else if (this.cursors.right.isDown) {
+        // Ajustar la velocidad horizontal para un movimiento lateral constante
+        this.Carrito.setVelocityX(160);
+      } else {
+        this.Carrito.setVelocityX(0);
+      }
+    } else {
+      this.Carrito.setVelocityX(0); // Detener el movimiento del carrito si el jugador no está en contacto
+    }
+
   }
 }
