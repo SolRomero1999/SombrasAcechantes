@@ -8,13 +8,16 @@ export default class Precarga extends Phaser.Scene {
     this.load.image("Menu", "./public/assets/images/Menu.png");
 
     // RECURSOS SELECCIÓN DE NIVEL
-    this.load.image("carrito", "./public/assets/images/carrito.png");
+    this.load.image("carrito1", "./public/assets/images/carrito1.png");
+    this.load.image("carrito2", "./public/assets/images/carrito2.png");
+    this.load.image("carrito3", "./public/assets/images/carrito3.png");
 
     // RECURSOS 1° NIVEL
     this.load.tilemapTiledJSON("map", "./public/tilemaps/nivel1.json");
     this.load.image("tilesFondo", "./public/assets/images/fondo.png");
     this.load.image("tilesPlataforma", "./public/assets/images/platform.png");
     this.load.image("salida", "./public/assets/images/salida.png");
+    this.load.image("carrito", "./public/assets/images/carrito.png");
     this.load.image("muro", "./public/assets/images/muro.png");
     this.load.image("pico", "./public/assets/images/pico.png");
     this.load.image("pinchos", "./public/assets/images/pinchos.png");
@@ -34,6 +37,16 @@ export default class Precarga extends Phaser.Scene {
       frameWidth: 353,
       frameHeight: 438,
     });
+
+    // RECURSOS 2° NIVEL
+    this.load.tilemapTiledJSON("map2", "./public/tilemaps/nivel2.json");
+
+    // RECURSOS 3° NIVEL
+    this.load.tilemapTiledJSON("map3", "./public/tilemaps/nivel3.json");
+
+    //RECURSOS PERDIDA Y GANADA
+    this.load.image("perdiste", "./public/assets/images/perdiste.png");
+    this.load.image("ganaste", "./public/assets/images/ganaste.png");
   }
 
   create() {
@@ -79,14 +92,14 @@ export default class Precarga extends Phaser.Scene {
     this.anims.create({
       key: 'jump-left',
       frames: this.anims.generateFrameNumbers('salto', { start: 0, end: 4 }),
-      frameRate: 5,
+      frameRate: 10,
       repeat: -1
     });
 
     this.anims.create({
       key: 'jump-right',
       frames: this.anims.generateFrameNumbers('salto', { start: 5, end: 10 }),
-      frameRate: 5,
+      frameRate: 10,
       repeat: -1
     });
 

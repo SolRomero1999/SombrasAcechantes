@@ -139,18 +139,6 @@
                 }, 
                 {
                  "height":0,
-                 "id":18,
-                 "name":"pinchos",
-                 "point":true,
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":0,
-                 "x":1212,
-                 "y":420
-                }, 
-                {
-                 "height":0,
                  "id":19,
                  "name":"muro",
                  "point":true,
@@ -172,6 +160,18 @@
                  "width":0,
                  "x":170,
                  "y":664
+                }, 
+                {
+                 "height":0,
+                 "id":23,
+                 "name":"pinchos",
+                 "point":true,
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":1200,
+                 "y":420
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -180,7 +180,7 @@
          "y":0
         }],
  "nextlayerid":7,
- "nextobjectid":23,
+ "nextobjectid":24,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.10.1",

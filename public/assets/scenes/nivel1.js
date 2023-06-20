@@ -45,7 +45,7 @@ export default class nivel1 extends Phaser.Scene {
 
     // Crear el carrito
     const spawnPointCarrito = map.findObject("objetos", (obj) => obj.name === "carrito");
-    this.Carrito = this.physics.add.sprite(spawnPointCarrito.x, spawnPointCarrito.y, "carrito").setScale(1.4);
+    this.Carrito = this.physics.add.sprite(spawnPointCarrito.x, spawnPointCarrito.y, "carrito").setScale(0.6);
     this.physics.add.collider(this.Carrito, plataformaLayer);
     this.physics.add.collider(this.Carrito, this.muro); // Establecer la colisión con el muro
     this.physics.add.collider(this.jugador, this.Carrito);
@@ -61,6 +61,8 @@ export default class nivel1 extends Phaser.Scene {
     this.physics.add.overlap(this.jugador, this.salida, this.pasarAlNivel2, null, this);
 
     this.luzEncendida = false;
+
+    this.distanciaRecorridaY = 0; // Variable para almacenar la distancia recorrida en el eje y
   }
 
   jugadorChocaConPico(jugador, pico) {
@@ -81,7 +83,7 @@ export default class nivel1 extends Phaser.Scene {
   jugadorMuere() {
     // Lógica para la muerte del jugador
     console.log("¡El jugador murió!");
-    this.scene.start("menu");
+    this.scene.start("perdiste");
   }
 
   pasarAlNivel2() {
@@ -114,7 +116,7 @@ export default class nivel1 extends Phaser.Scene {
       } else {
         this.jugador.anims.play('turn');
       }
-    }
+    } 
 
     if (this.cursors.up.isDown && this.jugador.body.blocked.down) {
       this.jugador.setVelocityY(-250); // Ajustar este valor para aumentar la altura del salto
@@ -145,6 +147,20 @@ export default class nivel1 extends Phaser.Scene {
       }
     } else {
       this.Carrito.setVelocityX(0); // Detener el movimiento del carrito si el jugador no está en contacto
+    }
+
+    // Actualizar la distancia recorrida en el eje y
+    this.distanciaRecorridaY += Math.abs(this.jugador.body.velocity.y);
+
+    // Verificar si el jugador está tocando una plataforma y reiniciar la distancia recorrida en el eje y a cero
+    if (this.jugador.body.blocked.down) {
+      this.distanciaRecorridaY = 0;
+    }
+
+    // Verificar la distancia recorrida sin tocar ninguna plataforma
+    const distanciaMaximaSinPlataforma = 3000; // Distancia máxima sin tocar plataformas
+    if (this.distanciaRecorridaY >= distanciaMaximaSinPlataforma && !this.jugador.body.blocked.down) {
+      this.jugadorMuere();
     }
   }
 }
