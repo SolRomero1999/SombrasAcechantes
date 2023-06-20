@@ -59,6 +59,8 @@ export default class nivel1 extends Phaser.Scene {
 
     // Condición para pasar de nivel
     this.physics.add.overlap(this.jugador, this.salida, this.pasarAlNivel2, null, this);
+
+    this.luzEncendida = false;
   }
 
   jugadorChocaConPico(jugador, pico) {
@@ -87,21 +89,40 @@ export default class nivel1 extends Phaser.Scene {
   }
 
   update() {
+    if (Phaser.Input.Keyboard.JustDown(this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.L))) {
+      this.luzEncendida = !this.luzEncendida;
+    }
+
     if (this.cursors.left.isDown) {
-      // Ajustar la velocidad horizontal para un salto lateral constante
       this.jugador.setVelocityX(-160);
-      this.jugador.anims.play("left", true);
+      if (this.luzEncendida) {
+        this.jugador.anims.play('left-luzEncendida', true);
+      } else {
+        this.jugador.anims.play('left', true);
+      }
     } else if (this.cursors.right.isDown) {
-      // Ajustar la velocidad horizontal para un salto lateral constante
       this.jugador.setVelocityX(160);
-      this.jugador.anims.play("right", true);
+      if (this.luzEncendida) {
+        this.jugador.anims.play('right-luzEncendida', true);
+      } else {
+        this.jugador.anims.play('right', true);
+      }
     } else {
       this.jugador.setVelocityX(0);
-      this.jugador.anims.play("turn");
+      if (this.luzEncendida) {
+        this.jugador.anims.play('turn-luzEncendida');
+      } else {
+        this.jugador.anims.play('turn');
+      }
     }
 
     if (this.cursors.up.isDown && this.jugador.body.blocked.down) {
-      this.jugador.setVelocityY(-200); // Ajustar este valor para aumentar la altura del salto
+      this.jugador.setVelocityY(-250); // Ajustar este valor para aumentar la altura del salto
+      if (this.cursors.left.isDown) {
+        this.jugador.anims.play('jump-left', true);
+      } else if (this.cursors.right.isDown) {
+        this.jugador.anims.play('jump-right', true);
+      }
     }
 
     // Verificar si el jugador está en contacto con el carrito
@@ -125,6 +146,5 @@ export default class nivel1 extends Phaser.Scene {
     } else {
       this.Carrito.setVelocityX(0); // Detener el movimiento del carrito si el jugador no está en contacto
     }
-
   }
 }
