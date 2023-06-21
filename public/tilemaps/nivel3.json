@@ -299,6 +299,54 @@
                  "width":0,
                  "x":536.363636363636,
                  "y":1738.78787878788
+                }, 
+                {
+                 "height":0,
+                 "id":38,
+                 "name":"volver",
+                 "point":true,
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":1577,
+                 "y":44
+                }, 
+                {
+                 "height":0,
+                 "id":39,
+                 "name":"info",
+                 "point":true,
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":1527,
+                 "y":85
+                }, 
+                {
+                 "height":0,
+                 "id":40,
+                 "name":"musica",
+                 "point":true,
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":1577,
+                 "y":110
+                }, 
+                {
+                 "height":0,
+                 "id":41,
+                 "name":"sonido",
+                 "point":true,
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":1626,
+                 "y":85
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -307,7 +355,7 @@
          "y":0
         }],
  "nextlayerid":7,
- "nextobjectid":30,
+ "nextobjectid":42,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.10.1",

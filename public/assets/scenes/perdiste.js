@@ -8,7 +8,7 @@ export default class perdiste extends Phaser.Scene {
       menuImage.setScale(1);
   
       // Agregar el texto "reintentar" después de tres segundos
-      this.time.delayedCall(3000, this.addRetryText, [], this);
+      this.time.delayedCall(1000, this.addRetryText, [], this);
     }
   
     addRetryText() {
@@ -19,6 +19,7 @@ export default class perdiste extends Phaser.Scene {
       }).setOrigin(1, 1).setInteractive();
   
       retryText.on("pointerup", () => {
+        this.sound.play("click");
         this.scene.start("menu"); 
       });
     }

@@ -1,4 +1,4 @@
-export default class nivel1 extends Phaser.Scene {
+export default class Nivel1 extends Phaser.Scene {
   constructor() {
     super("nivel1");
   }
@@ -11,7 +11,6 @@ export default class nivel1 extends Phaser.Scene {
     const capaPlataformas = map.addTilesetImage("platform", "tilesPlataforma");
     const fondoLayer = map.createLayer("fondo", capaFondo, 0, 0);
     const plataformaLayer = map.createLayer("plataformas", capaPlataformas, 0, 0);
-
     const objectosLayer = map.getObjectLayer("objetos");
     plataformaLayer.setCollisionByProperty({ colision: true });
 
@@ -24,20 +23,20 @@ export default class nivel1 extends Phaser.Scene {
     this.cursors = this.input.keyboard.createCursorKeys();
 
     // Obtener todos los objetos de pinchos en la capa de objetos
-const pinchosObjects = map.filterObjects("objetos", (obj) => obj.name === "pinchos");
+    const pinchosObjects = map.filterObjects("objetos", (obj) => obj.name === "pinchos");
 
-// Crear sprites de pinchos para cada objeto encontrado
-this.pinchos = this.physics.add.group();
-pinchosObjects.forEach((obj) => {
-  const pinchos = this.pinchos.create(obj.x, obj.y, "pinchos").setScale(0.4);
-  pinchos.setImmovable(true);
-  this.physics.add.collider(pinchos, plataformaLayer);
-  this.physics.add.collider(this.jugador, pinchos, this.jugadorMuere, null, this);
-});
+    // Crear sprites de pinchos para cada objeto encontrado
+    this.pinchos = this.physics.add.group();
+    pinchosObjects.forEach((obj) => {
+      const pinchos = this.pinchos.create(obj.x, obj.y, "pinchos").setScale(0.4);
+      pinchos.setImmovable(true);
+      this.physics.add.collider(pinchos, plataformaLayer);
+      this.physics.add.collider(this.jugador, pinchos, this.jugadorMuere, null, this);
+    });
 
     // Crear el pico
-    const spawnPointpico = map.findObject("objetos", (obj) => obj.name === "pico");
-    this.pico = this.physics.add.sprite(spawnPointpico.x, spawnPointpico.y, "pico").setScale(0.5);
+    const spawnPointPico = map.findObject("objetos", (obj) => obj.name === "pico");
+    this.pico = this.physics.add.sprite(spawnPointPico.x, spawnPointPico.y, "pico").setScale(0.5);
     this.physics.add.collider(this.pico, plataformaLayer);
     this.physics.add.collider(this.jugador, this.pico, this.jugadorChocaConPico, null, this);
 
@@ -50,10 +49,10 @@ pinchosObjects.forEach((obj) => {
 
     // Crear el carrito
     const spawnPointCarrito = map.findObject("objetos", (obj) => obj.name === "carrito");
-    this.Carrito = this.physics.add.sprite(spawnPointCarrito.x, spawnPointCarrito.y, "carrito").setScale(0.6);
-    this.physics.add.collider(this.Carrito, plataformaLayer);
-    this.physics.add.collider(this.Carrito, this.muro); // Establecer la colisión con el muro
-    this.physics.add.collider(this.jugador, this.Carrito);
+    this.carrito = this.physics.add.sprite(spawnPointCarrito.x, spawnPointCarrito.y, "carrito").setScale(0.6);
+    this.physics.add.collider(this.carrito, plataformaLayer);
+    this.physics.add.collider(this.carrito, this.muro); 
+    this.physics.add.collider(this.jugador, this.carrito);
     this.jugadorEnContactoConCarrito = false;
 
     // Crear la salida
@@ -62,8 +61,34 @@ pinchosObjects.forEach((obj) => {
     this.physics.add.collider(this.jugador, plataformaLayer);
     this.physics.add.collider(this.salida, plataformaLayer);
 
+    // Crear iconos
+    const spawnPointVolver = map.findObject("objetos", (obj) => obj.name === "volver");
+    this.volver = this.physics.add.sprite(spawnPointVolver.x, spawnPointVolver.y, "icono menu").setScale(0.9);
+    this.volver.setScrollFactor(0);
+    this.volver.body.allowGravity = false;
+    this.volver.setInteractive(); 
+    this.volver.on("pointerdown", () => {
+      this.sound.play("click");
+      this.scene.start("menu"); 
+    });
+
+    const spawnPointInfo = map.findObject("objetos", (obj) => obj.name === "info");
+    this.info = this.physics.add.sprite(spawnPointInfo.x, spawnPointInfo.y, "icono ayuda").setScale(0.7);
+    this.info.setScrollFactor(0);
+    this.info.body.allowGravity = false;
+
+    const spawnPointMusica = map.findObject("objetos", (obj) => obj.name === "musica");
+    this.musica = this.physics.add.sprite(spawnPointMusica.x, spawnPointMusica.y, "icono musica").setScale(0.7);
+    this.musica.setScrollFactor(0);
+    this.musica.body.allowGravity = false;
+
+    const spawnPointSonido = map.findObject("objetos", (obj) => obj.name === "sonido");
+    this.sonido = this.physics.add.sprite(spawnPointSonido.x, spawnPointSonido.y, "icono sonido").setScale(0.7);
+    this.sonido.setScrollFactor(0);
+    this.sonido.body.allowGravity = false;
+
     // Condición para pasar de nivel
-    this.physics.add.overlap(this.jugador, this.salida, this.pasardeNivel, null, this);
+    this.physics.add.overlap(this.jugador, this.salida, this.pasarDeNivel, null, this);
 
     this.luzEncendida = false;
 
@@ -77,7 +102,11 @@ pinchosObjects.forEach((obj) => {
 
   jugadorChocaConMuro(jugador, muro) {
     if (this.haRecogidoElPico) {
-      muro.disableBody(true, true); // Desactiva el cuerpo físico y oculta el sprite
+      var sound = this.sound.add('piedras'); 
+      sound.setVolume(0.3);
+      sound.setRate(2);
+      sound.play();
+      muro.disableBody(true, true); 
     } else {
       // El jugador simplemente se detiene al chocar con el muro
       jugador.setVelocityX(0);
@@ -91,7 +120,7 @@ pinchosObjects.forEach((obj) => {
     this.scene.start("perdiste");
   }
 
-  pasardeNivel() {
+  pasarDeNivel() {
     this.scene.start("nivel2");
   }
 
@@ -121,7 +150,7 @@ pinchosObjects.forEach((obj) => {
       } else {
         this.jugador.anims.play('turn');
       }
-    } 
+    }
 
     if (this.cursors.up.isDown && this.jugador.body.blocked.down) {
       this.jugador.setVelocityY(-250); // Ajustar este valor para aumentar la altura del salto
@@ -133,7 +162,7 @@ pinchosObjects.forEach((obj) => {
     }
 
     // Verificar si el jugador está en contacto con el carrito
-    if (this.physics.overlap(this.jugador, this.Carrito)) {
+    if (this.physics.overlap(this.jugador, this.carrito)) {
       this.jugadorEnContactoConCarrito = true;
     } else {
       this.jugadorEnContactoConCarrito = false;
@@ -143,15 +172,15 @@ pinchosObjects.forEach((obj) => {
     if (this.jugadorEnContactoConCarrito) {
       if (this.cursors.left.isDown) {
         // Ajustar la velocidad horizontal para un movimiento lateral constante
-        this.Carrito.setVelocityX(-160);
+        this.carrito.setVelocityX(-160);
       } else if (this.cursors.right.isDown) {
         // Ajustar la velocidad horizontal para un movimiento lateral constante
-        this.Carrito.setVelocityX(160);
+        this.carrito.setVelocityX(160);
       } else {
-        this.Carrito.setVelocityX(0);
+        this.carrito.setVelocityX(0);
       }
     } else {
-      this.Carrito.setVelocityX(0); // Detener el movimiento del carrito si el jugador no está en contacto
+      this.carrito.setVelocityX(0); // Detener el movimiento del carrito si el jugador no está en contacto
     }
 
     // Actualizar la distancia recorrida en el eje y

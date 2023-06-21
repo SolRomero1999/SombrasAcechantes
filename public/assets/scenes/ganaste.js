@@ -19,6 +19,7 @@ export default class ganaste extends Phaser.Scene {
       }).setOrigin(1, 1).setInteractive();
   
       retryText.on("pointerup", () => {
+        this.sound.play("click");
         this.scene.start("menu"); 
       });
     }

@@ -14,10 +14,10 @@ export default class Menu extends Phaser.Scene {
       fontStyle: "bold",
     });
     text.setOrigin(0.5);
-    text.setInteractive(); // Habilitar interactividad
-
+    text.setInteractive(); 
     text.on("pointerup", () => {
-      this.scene.start("SeleccionNivel"); // Redirigir a otra escena al hacer clic
+      this.sound.play("click");
+      this.scene.start("SeleccionNivel"); 
     });
   }
 }

@@ -12,6 +12,18 @@ export default class Precarga extends Phaser.Scene {
     this.load.image("carrito2", "./public/assets/images/carrito2.png");
     this.load.image("carrito3", "./public/assets/images/carrito3.png");
 
+    // SONIDO
+
+    this.load.audio('click', './public/assets/musica/click.mp3');
+    this.load.audio('carrito', './public/assets/musica/carrito.mp3');
+    this.load.audio('corte', './public/assets/musica/corte.mp3');
+    this.load.audio('encendido', './public/assets/musica/encendido.mp3');
+    this.load.audio('latidos', './public/assets/musica/latidos.mp3');
+    this.load.audio('musica', './public/assets/musica/musica.mp3');
+    this.load.audio('piedras', './public/assets/musica/piedras.mp3');
+    this.load.audio('salto', './public/assets/musica/salto.mp3');
+    this.load.audio('susurros', './public/assets/musica/susurros.mp3');
+
     // RECURSOS 1° NIVEL
     this.load.tilemapTiledJSON("map", "./public/tilemaps/nivel1.json");
     this.load.image("tilesFondo", "./public/assets/images/fondo.png");
