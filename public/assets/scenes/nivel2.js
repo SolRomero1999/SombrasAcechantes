@@ -23,12 +23,18 @@ export default class nivel2 extends Phaser.Scene {
       this.jugador.setScale(0.2);
       this.cursors = this.input.keyboard.createCursorKeys();
   
-      // Crear los pinchos
-      const spawnPointpinchos = map.findObject("objetos", (obj) => obj.name === "pinchos");
-      this.pinchos = this.physics.add.sprite(spawnPointpinchos.x, spawnPointpinchos.y, "pinchos").setScale(0.5);
-      this.pinchos.setImmovable(true); // Establecer como inamovible
-      this.physics.add.collider(this.pinchos, plataformaLayer);
-      this.physics.add.collider(this.jugador, this.pinchos, this.jugadorMuere, null, this);
+      // Obtener todos los objetos de pinchos en la capa de objetos
+const pinchosObjects = map.filterObjects("objetos", (obj) => obj.name === "pinchos");
+
+// Crear sprites de pinchos para cada objeto encontrado
+this.pinchos = this.physics.add.group();
+pinchosObjects.forEach((obj) => {
+  const pinchos = this.pinchos.create(obj.x, obj.y, "pinchos").setScale(0.4);
+  pinchos.setImmovable(true);
+  this.physics.add.collider(pinchos, plataformaLayer);
+  this.physics.add.collider(this.jugador, pinchos, this.jugadorMuere, null, this);
+});
+
   
       // Crear el pico
       const spawnPointpico = map.findObject("objetos", (obj) => obj.name === "pico");
@@ -58,11 +64,21 @@ export default class nivel2 extends Phaser.Scene {
       this.physics.add.collider(this.salida, plataformaLayer);
   
       // Condición para pasar de nivel
-      this.physics.add.overlap(this.jugador, this.salida, this.pasarAlNivel2, null, this);
+      this.physics.add.overlap(this.jugador, this.salida, this.pasardeNivel, null, this);
   
       this.luzEncendida = false;
   
       this.distanciaRecorridaY = 0; // Variable para almacenar la distancia recorrida en el eje y
+
+      // Configurar la cámara
+  this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
+  this.cameras.main.startFollow(this.jugador);
+
+  // Configurar los límites del mundo físico
+this.physics.world.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
+this.jugador.body.setCollideWorldBounds(true);
+
+
     }
   
     jugadorChocaConPico(jugador, pico) {
@@ -86,7 +102,7 @@ export default class nivel2 extends Phaser.Scene {
       this.scene.start("perdiste");
     }
   
-    pasarAlNivel2() {
+    pasardeNivel() {
       this.scene.start("nivel3");
     }
   
@@ -162,5 +178,9 @@ export default class nivel2 extends Phaser.Scene {
       if (this.distanciaRecorridaY >= distanciaMaximaSinPlataforma && !this.jugador.body.blocked.down) {
         this.jugadorMuere();
       }
+
+      // Ajustar la posición de la cámara para seguir al jugador en el eje Y
+  this.cameras.main.scrollY = this.jugador.y - this.cameras.main.height / 2;
+
     }
   }

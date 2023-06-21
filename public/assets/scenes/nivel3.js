@@ -23,12 +23,18 @@ export default class nivel3 extends Phaser.Scene {
       this.jugador.setScale(0.2);
       this.cursors = this.input.keyboard.createCursorKeys();
   
-      // Crear los pinchos
-      const spawnPointpinchos = map.findObject("objetos", (obj) => obj.name === "pinchos");
-      this.pinchos = this.physics.add.sprite(spawnPointpinchos.x, spawnPointpinchos.y, "pinchos").setScale(0.5);
-      this.pinchos.setImmovable(true); // Establecer como inamovible
-      this.physics.add.collider(this.pinchos, plataformaLayer);
-      this.physics.add.collider(this.jugador, this.pinchos, this.jugadorMuere, null, this);
+      // Obtener todos los objetos de pinchos en la capa de objetos
+const pinchosObjects = map.filterObjects("objetos", (obj) => obj.name === "pinchos");
+
+// Crear sprites de pinchos para cada objeto encontrado
+this.pinchos = this.physics.add.group();
+pinchosObjects.forEach((obj) => {
+  const pinchos = this.pinchos.create(obj.x, obj.y, "pinchos").setScale(0.4);
+  pinchos.setImmovable(true);
+  this.physics.add.collider(pinchos, plataformaLayer);
+  this.physics.add.collider(this.jugador, pinchos, this.jugadorMuere, null, this);
+});
+
   
       // Crear el pico
       const spawnPointpico = map.findObject("objetos", (obj) => obj.name === "pico");
@@ -43,13 +49,20 @@ export default class nivel3 extends Phaser.Scene {
       this.physics.add.collider(this.muro, plataformaLayer);
       this.physics.add.collider(this.jugador, this.muro, this.jugadorChocaConMuro, null, this);
   
-      // Crear el carrito
-      const spawnPointCarrito = map.findObject("objetos", (obj) => obj.name === "carrito");
-      this.Carrito = this.physics.add.sprite(spawnPointCarrito.x, spawnPointCarrito.y, "carrito").setScale(0.6);
-      this.physics.add.collider(this.Carrito, plataformaLayer);
-      this.physics.add.collider(this.Carrito, this.muro); // Establecer la colisión con el muro
-      this.physics.add.collider(this.jugador, this.Carrito);
-      this.jugadorEnContactoConCarrito = false;
+      // Obtener todos los objetos de carrito en la capa de objetos
+const carritoObjects = map.filterObjects("objetos", (obj) => obj.name === "carrito");
+
+// Crear sprites de carrito para cada objeto encontrado
+this.carritos = this.physics.add.group();
+carritoObjects.forEach((obj) => {
+  const carrito = this.carritos.create(obj.x, obj.y, "carrito").setScale(0.6);
+  this.physics.add.collider(carrito, plataformaLayer);
+  this.physics.add.collider(carrito, this.muro);
+  this.physics.add.collider(this.jugador, carrito);
+});
+
+this.jugadorEnContactoConCarrito = false;
+
   
       // Crear la salida
       const spawnPointSalida = map.findObject("objetos", (obj) => obj.name === "salida");
@@ -58,11 +71,20 @@ export default class nivel3 extends Phaser.Scene {
       this.physics.add.collider(this.salida, plataformaLayer);
   
       // Condición para pasar de nivel
-      this.physics.add.overlap(this.jugador, this.salida, this.pasarAlNivel2, null, this);
+      this.physics.add.overlap(this.jugador, this.salida, this.pasardeNivel, null, this);
   
       this.luzEncendida = false;
   
       this.distanciaRecorridaY = 0; // Variable para almacenar la distancia recorrida en el eje y
+
+      // Configurar la cámara
+  this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
+  this.cameras.main.startFollow(this.jugador);
+
+  // Configurar los límites del mundo físico
+this.physics.world.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
+this.jugador.body.setCollideWorldBounds(true);
+
     }
   
     jugadorChocaConPico(jugador, pico) {
@@ -86,7 +108,7 @@ export default class nivel3 extends Phaser.Scene {
       this.scene.start("perdiste");
     }
   
-    pasarAlNivel2() {
+    pasardeNivel() {
       this.scene.start("ganaste");
     }
   
@@ -127,27 +149,28 @@ export default class nivel3 extends Phaser.Scene {
         }
       }
   
-      // Verificar si el jugador está en contacto con el carrito
-      if (this.physics.overlap(this.jugador, this.Carrito)) {
-        this.jugadorEnContactoConCarrito = true;
-      } else {
-        this.jugadorEnContactoConCarrito = false;
-      }
-  
-      // Mover el carrito solo si el jugador está en contacto con él
-      if (this.jugadorEnContactoConCarrito) {
-        if (this.cursors.left.isDown) {
-          // Ajustar la velocidad horizontal para un movimiento lateral constante
-          this.Carrito.setVelocityX(-160);
-        } else if (this.cursors.right.isDown) {
-          // Ajustar la velocidad horizontal para un movimiento lateral constante
-          this.Carrito.setVelocityX(160);
-        } else {
-          this.Carrito.setVelocityX(0);
-        }
-      } else {
-        this.Carrito.setVelocityX(0); // Detener el movimiento del carrito si el jugador no está en contacto
-      }
+      // Verificar si el jugador está en contacto con al menos un carrito
+if (this.physics.overlap(this.jugador, this.carritos)) {
+  this.jugadorEnContactoConCarrito = true;
+} else {
+  this.jugadorEnContactoConCarrito = false;
+}
+
+// Mover los carritos solo si el jugador está en contacto con ellos
+if (this.jugadorEnContactoConCarrito) {
+  this.carritos.getChildren().forEach((carrito) => {
+    if (this.cursors.left.isDown) {
+      carrito.setVelocityX(-160);
+    } else if (this.cursors.right.isDown) {
+      carrito.setVelocityX(160);
+    } else {
+      carrito.setVelocityX(0);
+    }
+  });
+} else {
+  this.carritos.setVelocityX(0); // Detener el movimiento de todos los carritos si el jugador no está en contacto
+}
+
   
       // Actualizar la distancia recorrida en el eje y
       this.distanciaRecorridaY += Math.abs(this.jugador.body.velocity.y);
@@ -162,5 +185,8 @@ export default class nivel3 extends Phaser.Scene {
       if (this.distanciaRecorridaY >= distanciaMaximaSinPlataforma && !this.jugador.body.blocked.down) {
         this.jugadorMuere();
       }
+
+      // Ajustar la posición de la cámara para seguir al jugador en el eje Y
+  this.cameras.main.scrollY = this.jugador.y - this.cameras.main.height / 2;
     }
   }
