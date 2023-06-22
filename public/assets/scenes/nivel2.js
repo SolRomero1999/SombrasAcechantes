@@ -14,6 +14,10 @@ export default class Nivel2 extends Phaser.Scene {
 
     const objectosLayer = map.getObjectLayer("objetos");
     plataformaLayer.setCollisionByProperty({ colision: true });
+    
+    this.luzEncendida = false;
+
+    this.distanciaRecorridaY = 0; // Variable para almacenar la distancia recorrida en el eje y
 
     // Crear al jugador
     const spawnPoint = map.findObject("objetos", (obj) => obj.name === "jugador");
@@ -32,7 +36,7 @@ export default class Nivel2 extends Phaser.Scene {
       const pinchos = this.pinchos.create(obj.x, obj.y, "pinchos").setScale(0.4);
       pinchos.setImmovable(true);
       this.physics.add.collider(pinchos, plataformaLayer);
-      this.physics.add.collider(this.jugador, pinchos, this.jugadorMuere, null, this);
+      this.physics.add.collider(this.jugador, pinchos, this.jugadorChocaConPinchos, null, this);
     });
 
     // Crear el pico
@@ -61,13 +65,14 @@ export default class Nivel2 extends Phaser.Scene {
     this.salida = this.physics.add.sprite(spawnPointSalida.x, spawnPointSalida.y, "salida").setScale(0.9);
     this.physics.add.collider(this.jugador, plataformaLayer);
     this.physics.add.collider(this.salida, plataformaLayer);
-
+    
     // Crear iconos
     const spawnPointVolver = map.findObject("objetos", (obj) => obj.name === "volver");
     this.volver = this.physics.add.sprite(spawnPointVolver.x, spawnPointVolver.y, "icono menu").setScale(0.9);
     this.volver.setScrollFactor(0);
     this.volver.body.allowGravity = false;
-    this.volver.setInteractive(); // Permite que el sprite sea interactivo y pueda recibir eventos de clic
+    this.volver.setDepth(2);
+    this.volver.setInteractive(); 
     this.volver.on("pointerdown", () => {
       this.sound.play("click");
       this.scene.start("menu"); 
@@ -77,23 +82,42 @@ export default class Nivel2 extends Phaser.Scene {
     this.info = this.physics.add.sprite(spawnPointInfo.x, spawnPointInfo.y, "icono ayuda").setScale(0.7);
     this.info.setScrollFactor(0);
     this.info.body.allowGravity = false;
+    this.info.setDepth(2);
+    this.info.setInteractive(); 
+    this.info.on("pointerdown", () => {
+      this.sound.play("click");
+    });
 
     const spawnPointMusica = map.findObject("objetos", (obj) => obj.name === "musica");
     this.musica = this.physics.add.sprite(spawnPointMusica.x, spawnPointMusica.y, "icono musica").setScale(0.7);
     this.musica.setScrollFactor(0);
     this.musica.body.allowGravity = false;
+    this.musica.setDepth(2);
+    this.musica.setInteractive(); 
+    this.musica.on("pointerdown", () => {
+      this.sound.play("click");
+    });
 
     const spawnPointSonido = map.findObject("objetos", (obj) => obj.name === "sonido");
     this.sonido = this.physics.add.sprite(spawnPointSonido.x, spawnPointSonido.y, "icono sonido").setScale(0.7);
     this.sonido.setScrollFactor(0);
     this.sonido.body.allowGravity = false;
+    this.sonido.setDepth(2);
+    this.sonido.setInteractive(); 
+    this.sonido.on("pointerdown", () => {
+      this.sound.play("click");
+    });
 
     // Condición para pasar de nivel
     this.physics.add.overlap(this.jugador, this.salida, this.pasarDeNivel, null, this);
 
-    this.luzEncendida = false;
+    // Configurar la cámara
+    this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
+    this.cameras.main.startFollow(this.jugador);
 
-    this.distanciaRecorridaY = 0; // Variable para almacenar la distancia recorrida en el eje y
+    // Configurar los límites del mundo físico
+    this.physics.world.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
+    this.jugador.body.setCollideWorldBounds(true);
   }
 
   jugadorChocaConPico(jugador, pico) {
@@ -115,7 +139,27 @@ export default class Nivel2 extends Phaser.Scene {
     }
   }
 
+  jugadorChocaConPinchos(jugador, pinchos) {
+    // Reproducir el sonido de choque con los pinchos
+    var sound = this.sound.add('corte');
+    sound.setVolume(0.5);
+    sound.play();
+
+    // Lógica para la muerte del jugador después de reproducir el sonido
+    jugador.setTint(0xff0000); // Cambiar el color del jugador al chocar con los pinchos
+    this.time.delayedCall(500, () => {
+      jugador.clearTint();
+      this.jugadorMuere();
+    });
+  }
+
   jugadorMuere() {
+    // Lógica para la muerte del jugador
+    console.log("¡El jugador murió!");
+    this.scene.start("perdiste");
+  }
+
+  jugadorMuereCaida() {
     // Lógica para la muerte del jugador
     console.log("¡El jugador murió!");
     this.scene.start("perdiste");
@@ -195,7 +239,7 @@ export default class Nivel2 extends Phaser.Scene {
     // Verificar la distancia recorrida sin tocar ninguna plataforma
     const distanciaMaximaSinPlataforma = 3000; // Distancia máxima sin tocar plataformas
     if (this.distanciaRecorridaY >= distanciaMaximaSinPlataforma && !this.jugador.body.blocked.down) {
-      this.jugadorMuere();
+      this.jugadorMuereCaida();
     }
   }
 }
