@@ -1,6 +1,7 @@
 export default class Nivel2 extends Phaser.Scene {
   constructor() {
     super("nivel2");
+    this.sonidosActivados = true;
   }
 
   create() {
@@ -19,7 +20,6 @@ export default class Nivel2 extends Phaser.Scene {
     const capaPlataformas = map.addTilesetImage("platform", "tilesPlataforma");
     const fondoLayer = map.createLayer("fondo", capaFondo, 0, 0);
     const plataformaLayer = map.createLayer("plataformas", capaPlataformas, 0, 0);
-
     const objectosLayer = map.getObjectLayer("objetos");
     plataformaLayer.setCollisionByProperty({ colision: true });
     
@@ -118,6 +118,8 @@ export default class Nivel2 extends Phaser.Scene {
     this.sonido.setDepth(2);
     this.sonido.setInteractive(); 
     this.sonido.on("pointerdown", () => {
+      // Invertir el estado de los sonidos
+      this.sonidosActivados = !this.sonidosActivados;
       this.sound.play("click");
     });
 
@@ -140,11 +142,13 @@ export default class Nivel2 extends Phaser.Scene {
 
   jugadorChocaConMuro(jugador, muro) {
     if (this.haRecogidoElPico) {
+      if (this.sonidosActivados) {
       var sound = this.sound.add('piedras'); 
       sound.setVolume(0.3);
       sound.setRate(2);
       sound.play();
       muro.disableBody(true, true); 
+    }
     } else {
       // El jugador simplemente se detiene al chocar con el muro
       jugador.setVelocityX(0);
@@ -153,10 +157,12 @@ export default class Nivel2 extends Phaser.Scene {
   }
 
   jugadorChocaConPinchos(jugador, pinchos) {
+    if (this.sonidosActivados) {
     // Reproducir el sonido de choque con los pinchos
     var sound = this.sound.add('corte');
     sound.setVolume(0.5);
     sound.play();
+  }
 
     // Lógica para la muerte del jugador después de reproducir el sonido
     jugador.setTint(0xff0000); // Cambiar el color del jugador al chocar con los pinchos
@@ -185,6 +191,12 @@ export default class Nivel2 extends Phaser.Scene {
   update() {
     if (Phaser.Input.Keyboard.JustDown(this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.L))) {
       this.luzEncendida = !this.luzEncendida;
+
+      if (this.sonidosActivados) {
+        // Reproducir el sonido
+        this.sound.play('encendido');
+        this.sound.setVolume(0.1);
+      }
     }
 
     if (this.cursors.left.isDown) {
