@@ -13,7 +13,7 @@ export default class Nivel2 extends Phaser.Scene {
       this.game.music.play();
     }
 
-    const map = this.make.tilemap({ key: "map" });
+    const map = this.make.tilemap({ key: "map2" });
 
     // Cargar las capas de tiles: fondo y plataformas
     const capaFondo = map.addTilesetImage("fondo", "tilesFondo");
