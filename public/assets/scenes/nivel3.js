@@ -4,6 +4,14 @@ export default class Nivel3 extends Phaser.Scene {
   }
 
   create() {
+    // Obtener referencia al objeto de música de la escena anterior
+    this.game.music = this.sound.get("musica");
+
+    // Reanuda la música si ya se estaba reproduciendo en la escena anterior
+    if (this.game.music && !this.game.music.isPlaying) {
+      this.game.music.play();
+    }
+
     const map = this.make.tilemap({ key: "map3" });
 
     // Cargar las capas de tiles: fondo y plataformas
@@ -101,6 +109,11 @@ export default class Nivel3 extends Phaser.Scene {
     this.musica.setInteractive(); 
     this.musica.on("pointerdown", () => {
       this.sound.play("click");
+      if (this.game.music.isPlaying) {
+        this.game.music.pause();
+      } else {
+        this.game.music.resume();
+      }
     });
 
     const spawnPointSonido = map.findObject("objetos", (obj) => obj.name === "sonido");

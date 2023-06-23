@@ -4,6 +4,11 @@ export default class SeleccionNivel extends Phaser.Scene {
   }
 
   create() {
+    // Reanuda la música si ya se estaba reproduciendo en la escena anterior
+    if (this.game.music && !this.game.music.isPlaying) {
+      this.game.music.play();
+  }
+
     const carritoY = this.scale.height / 2; // Posición Y centrada de los carritos
 
     const carritoX1 = this.scale.width / 4; // Posición X del primer carrito
