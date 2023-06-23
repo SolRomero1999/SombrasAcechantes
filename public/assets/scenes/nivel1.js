@@ -1,6 +1,7 @@
 export default class Nivel1 extends Phaser.Scene {
   constructor() {
     super("nivel1");
+    this.oscuridadActivada = true;
   }
 
   create() {
@@ -25,6 +26,19 @@ export default class Nivel1 extends Phaser.Scene {
     this.jugador.setCollideWorldBounds(true);
     this.jugador.setScale(0.2);
     this.cursors = this.input.keyboard.createCursorKeys();
+    this.jugador.setDepth(2);
+
+    // Crear la oscuridad como un gráfico de Phaser
+    const radioOscuridad = 150; // Radio del círculo de oscuridad
+    const oscuridad = this.add.graphics();
+    oscuridad.fillStyle(0x000000, 1);
+    oscuridad.setDepth(1);
+    oscuridad.fillCircle(this.jugador.x-210, this.jugador.y-170, radioOscuridad);
+    oscuridad.visible = true;
+    this.oscuridad = oscuridad;
+
+    // Actualizar la posición de la oscuridad con respecto al jugador en cada fotograma
+    this.oscuridad.setPosition(this.jugador.x, this.jugador.y);
 
     // Obtener todos los objetos de pinchos en la capa de objetos
     const pinchosObjects = map.filterObjects("objetos", (obj) => obj.name === "pinchos");
@@ -162,9 +176,21 @@ export default class Nivel1 extends Phaser.Scene {
   }
 
   update() {
+    // Cambiar la visibilidad de la oscuridad al presionar la tecla 'L'
     if (Phaser.Input.Keyboard.JustDown(this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.L))) {
-      this.luzEncendida = !this.luzEncendida;
+      this.luzEncendida = !this.luzEncendida; // Cambia el estado de la luz encendida
+      
+      if (this.luzEncendida) {
+        this.oscuridad.visible = false; // Apaga la oscuridad
+        this.oscuridadActivada = false; // Desactiva la oscuridad
+      } else {
+        this.oscuridad.visible = true; // Enciende la oscuridad
+        this.oscuridadActivada = true; // Activa la oscuridad
+      }
     }
+    
+    // Actualizar la posición de la oscuridad con respecto al jugador en cada fotograma
+    this.oscuridad.setPosition(this.jugador.x, this.jugador.y);
 
     if (this.cursors.left.isDown) {
       this.jugador.setVelocityX(-160);
