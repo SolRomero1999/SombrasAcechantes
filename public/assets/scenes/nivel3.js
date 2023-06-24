@@ -98,9 +98,54 @@ export default class Nivel3 extends Phaser.Scene {
     this.info.body.allowGravity = false;
     this.info.setDepth(2);
     this.info.setInteractive(); 
+
+    const consejos = ["consejo1", "consejo2", "consejo3", "consejo4", "consejo5"];
+    let consejoIndex = 0;
+    let consejoActual;
+    
     this.info.on("pointerdown", () => {
       this.sound.play("click");
+      
+      if (consejoIndex < consejos.length) {
+        if (!this.image) {
+          consejoActual = consejos[consejoIndex];
+          this.image = this.add.image(this.cameras.main.centerX, this.cameras.main.centerY, consejoActual);
+          this.image.setScale(0.5);
+          
+          this.image.setInteractive();
+          this.image.on("pointerdown", () => {
+            this.sound.play("click");
+            consejoIndex++;
+            this.image.destroy();
+            this.image = null;
+            this.mostrarSiguienteConsejo();
+          });
+        }
+      } else {
+        this.image.destroy();
+        this.image = null;
+        consejoIndex = 0;
+      }
     });
+    
+    this.mostrarSiguienteConsejo = () => {
+      if (consejoIndex < consejos.length) {
+        consejoActual = consejos[consejoIndex];
+        this.image = this.add.image(this.cameras.main.centerX, this.cameras.main.centerY, consejoActual);
+        this.image.setScale(0.5);
+        
+        this.image.setInteractive();
+        this.image.on("pointerdown", () => {
+          this.sound.play("click");
+          consejoIndex++;
+          this.image.destroy();
+          this.image = null;
+          this.mostrarSiguienteConsejo();
+        });
+      } else {
+        consejoIndex = 0;
+      }
+    };
 
     const spawnPointMusica = map.findObject("objetos", (obj) => obj.name === "musica");
     this.musica = this.physics.add.sprite(spawnPointMusica.x, spawnPointMusica.y, "icono musica").setScale(0.7);
