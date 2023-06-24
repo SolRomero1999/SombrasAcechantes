@@ -106,7 +106,9 @@ export default class Nivel1 extends Phaser.Scene {
     this.volver.setDepth(2);
     this.volver.setInteractive(); 
     this.volver.on("pointerdown", () => {
-      this.sound.play("click");
+      if (this.sonidosActivados) {
+        this.sound.play("click");
+      }
       this.scene.start("menu"); 
     });
 
@@ -122,8 +124,9 @@ export default class Nivel1 extends Phaser.Scene {
     let consejoActual;
     
     this.info.on("pointerdown", () => {
+      if (this.sonidosActivados) {
       this.sound.play("click");
-      
+    }
       if (consejoIndex < consejos.length) {
         if (!this.image) {
           consejoActual = consejos[consejoIndex];
@@ -132,7 +135,9 @@ export default class Nivel1 extends Phaser.Scene {
           
           this.image.setInteractive();
           this.image.on("pointerdown", () => {
-            this.sound.play("click");
+            if (this.sonidosActivados) {
+              this.sound.play("click");
+            }
             consejoIndex++;
             this.image.destroy();
             this.image = null;
@@ -154,7 +159,9 @@ export default class Nivel1 extends Phaser.Scene {
         
         this.image.setInteractive();
         this.image.on("pointerdown", () => {
-          this.sound.play("click");
+          if (this.sonidosActivados) {
+            this.sound.play("click");
+          }
           consejoIndex++;
           this.image.destroy();
           this.image = null;
@@ -172,7 +179,9 @@ export default class Nivel1 extends Phaser.Scene {
     this.musica.setDepth(2);
     this.musica.setInteractive(); 
     this.musica.on("pointerdown", () => {
-      this.sound.play("click");
+      if (this.sonidosActivados) {
+        this.sound.play("click");
+      }
       if (this.game.music.isPlaying) {
         this.game.music.pause();
       } else {
