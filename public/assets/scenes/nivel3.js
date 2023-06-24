@@ -35,6 +35,16 @@ export default class Nivel3 extends Phaser.Scene {
     this.jugador.setScale(0.2);
     this.cursors = this.input.keyboard.createCursorKeys();
 
+    // Obtener todos los objetos de flechas
+    const flechasObjects = map.filterObjects("objetos", (obj) => obj.name === "flecha");
+
+    // Crear sprites 
+    this.flecha = this.physics.add.group();
+    flechasObjects.forEach((obj) => {
+      const flecha = this.flecha.create(obj.x, obj.y, "flecha").setScale(0.7);
+      flecha.body.allowGravity = false;
+    });
+
     // Obtener todos los objetos de pinchos en la capa de objetos
     const pinchosObjects = map.filterObjects("objetos", (obj) => obj.name === "pinchos");
 

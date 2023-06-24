@@ -49,6 +49,16 @@ export default class Nivel1 extends Phaser.Scene {
     // Actualizar la posición de la oscuridad con respecto al jugador en cada fotograma
     this.oscuridad.setPosition(this.jugador.x, this.jugador.y);
 
+    // Obtener todos los objetos de flechas
+    const flechasObjects = map.filterObjects("objetos", (obj) => obj.name === "flecha");
+
+    // Crear sprites 
+    this.flecha = this.physics.add.group();
+    flechasObjects.forEach((obj) => {
+      const flecha = this.flecha.create(obj.x, obj.y, "flecha").setScale(0.7);
+      flecha.body.allowGravity = false;
+    });
+    
     // Obtener todos los objetos de pinchos en la capa de objetos
     const pinchosObjects = map.filterObjects("objetos", (obj) => obj.name === "pinchos");
 
@@ -259,7 +269,7 @@ export default class Nivel1 extends Phaser.Scene {
         this.oscuridadActivada = true; // Activa la oscuridad
       }
     }
-    
+
     // Actualizar la posición de la oscuridad con respecto al jugador en cada fotograma
     this.oscuridad.setPosition(this.jugador.x, this.jugador.y);
 

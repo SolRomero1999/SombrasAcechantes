@@ -219,6 +219,54 @@
                  "width":0,
                  "x":1626,
                  "y":85
+                }, 
+                {
+                 "height":0,
+                 "id":28,
+                 "name":"flecha",
+                 "point":true,
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":1454,
+                 "y":176
+                }, 
+                {
+                 "height":0,
+                 "id":29,
+                 "name":"flecha",
+                 "point":true,
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":946,
+                 "y":408
+                }, 
+                {
+                 "height":0,
+                 "id":30,
+                 "name":"flecha",
+                 "point":true,
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":280,
+                 "y":626
+                }, 
+                {
+                 "height":0,
+                 "id":31,
+                 "name":"flecha",
+                 "point":true,
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":0,
+                 "x":694,
+                 "y":636
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -227,7 +275,7 @@
          "y":0
         }],
  "nextlayerid":7,
- "nextobjectid":28,
+ "nextobjectid":32,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.10.1",
