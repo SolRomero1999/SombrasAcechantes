@@ -137,6 +137,7 @@ export default class Nivel2 extends Phaser.Scene {
           consejoActual = consejos[consejoIndex];
           this.image = this.add.image(this.cameras.main.centerX, this.cameras.main.centerY, consejoActual);
           this.image.setScale(0.5);
+          this.image.setDepth(2);
           
           this.image.setInteractive();
           this.image.on("pointerdown", () => {
@@ -161,6 +162,7 @@ export default class Nivel2 extends Phaser.Scene {
         consejoActual = consejos[consejoIndex];
         this.image = this.add.image(this.cameras.main.centerX, this.cameras.main.centerY, consejoActual);
         this.image.setScale(0.5);
+        this.image.setDepth(2);
         
         this.image.setInteractive();
         this.image.on("pointerdown", () => {
