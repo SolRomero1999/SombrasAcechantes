@@ -43,6 +43,7 @@ export default class Precarga extends Phaser.Scene {
     this.load.image("consejo4", "./public/assets/images/consejo4.png");
     this.load.image("consejo5", "./public/assets/images/consejo5.png");
     this.load.image("flecha", "./public/assets/images/flecha.png");
+    this.load.image("oscuridadfija", "./public/assets/images/fijo.png");
     this.load.spritesheet("salto", "./public/assets/images/salto.png", {
       frameWidth: 340,
       frameHeight: 438,

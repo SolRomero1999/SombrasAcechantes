@@ -34,6 +34,25 @@ export default class Nivel3 extends Phaser.Scene {
     this.jugador.setCollideWorldBounds(true);
     this.jugador.setScale(0.2);
     this.cursors = this.input.keyboard.createCursorKeys();
+    this.jugador.setDepth(2);
+
+    // Crear oscuridad 
+    const radioOscuridad = 200; // Radio del círculo de oscuridad
+    const oscuridad = this.add.graphics();
+    oscuridad.fillStyle(0x000000, 1);
+    oscuridad.setDepth(1);
+    oscuridad.fillCircle(this.jugador.x-210, this.jugador.y-170, radioOscuridad);
+    oscuridad.visible = true;
+    this.oscuridad = oscuridad;
+
+    // Actualizar la posición de la oscuridad con respecto al jugador en cada fotograma
+    this.oscuridad.setPosition(this.jugador.x, this.jugador.y);
+
+    // Crear la capa de oscuridad
+    const menuImage = this.add.image (this.jugador.x, this.jugador.y, "oscuridadfija");
+    menuImage.setScale(6.5);
+    this.menuImage = menuImage;
+    menuImage.setDepth(1);
 
     // Obtener todos los objetos de flechas
     const flechasObjects = map.filterObjects("objetos", (obj) => obj.name === "flecha");
@@ -51,7 +70,7 @@ export default class Nivel3 extends Phaser.Scene {
     // Crear sprites de pinchos para cada objeto encontrado
     this.pinchos = this.physics.add.group();
     pinchosObjects.forEach((obj) => {
-      const pinchos = this.pinchos.create(obj.x, obj.y, "pinchos").setScale(0.4);
+      const pinchos = this.pinchos.create(obj.x, obj.y, "pinchos").setScale(0.3);
       pinchos.setImmovable(true);
       this.physics.add.collider(pinchos, plataformaLayer);
       this.physics.add.collider(this.jugador, pinchos, this.jugadorChocaConPinchos, null, this);
@@ -260,15 +279,29 @@ export default class Nivel3 extends Phaser.Scene {
   }
 
   update() {
+    // Cambiar la visibilidad de la oscuridad al presionar la tecla 'L'
     if (Phaser.Input.Keyboard.JustDown(this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.L))) {
-      this.luzEncendida = !this.luzEncendida;
-
+      this.luzEncendida = !this.luzEncendida; // Cambia el estado de la luz encendida
+      
       if (this.sonidosActivados) {
         // Reproducir el sonido
         this.sound.play('encendido');
         this.sound.setVolume(0.1);
       }
+
+      if (this.luzEncendida) {
+        this.oscuridad.visible = false; // Apaga la oscuridad
+        this.oscuridadActivada = false; // Desactiva la oscuridad
+      } else {
+        this.oscuridad.visible = true; // Enciende la oscuridad
+        this.oscuridadActivada = true; // Activa la oscuridad
+      }
     }
+
+    // Actualizar la posición de la oscuridad con respecto al jugador en cada fotograma
+    this.oscuridad.setPosition(this.jugador.x, this.jugador.y);
+    // Actualizar la posición de la imagen de la capa de oscuridad con respecto al jugador
+    this.menuImage.setPosition(this.jugador.x, this.jugador.y);
 
     if (this.cursors.left.isDown) {
       this.jugador.setVelocityX(-160);
