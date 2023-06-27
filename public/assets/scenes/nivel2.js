@@ -25,6 +25,18 @@ export default class Nivel2 extends Phaser.Scene {
     
     this.luzEncendida = false;
 
+    this.tiempoLuzEncendida = 0;
+
+    this.contadorTexto = this.add.text(10, 10, 'Tiempo luz encendida: 0', { fontFamily: 'Arial', fontSize: 20, color: '#ffffff' });
+    this.contadorTexto.setDepth(2);
+    this.contadorTexto.setScrollFactor(0);
+
+    this.maximoTiempoTexto = this.add.text(10, 40, 'Tiempo de uso de luz máximo: 60 segundos', { fontFamily: 'Arial', fontSize: 20, color: '#ffffff' });
+    this.maximoTiempoTexto.setDepth(2);
+    this.maximoTiempoTexto.setScrollFactor(0);
+
+    this.luzPuedeEncenderse = true;
+
     this.distanciaRecorridaY = 0; // Variable para almacenar la distancia recorrida en el eje y
 
     // Crear al jugador
@@ -208,6 +220,11 @@ export default class Nivel2 extends Phaser.Scene {
       this.sound.play("click");
     });
 
+    // Imagen para que el jugador sepa que junto el pico
+    this.imagenPicoRecogido = this.add.image(game.config.width - 20, game.config.height - 20, 'pico').setOrigin(1);
+    this.imagenPicoRecogido.setVisible(false);
+    this.imagenPicoRecogido.setDepth(2);
+
     // Condición para pasar de nivel
     this.physics.add.overlap(this.jugador, this.salida, this.pasarDeNivel, null, this);
 
@@ -220,62 +237,10 @@ export default class Nivel2 extends Phaser.Scene {
     this.jugador.body.setCollideWorldBounds(true);
   }
 
-  jugadorChocaConPico(jugador, pico) {
-    pico.disableBody(true, true); // Desactiva el cuerpo físico y oculta el sprite
-    this.haRecogidoElPico = true;
-  }
-
-  jugadorChocaConMuro(jugador, muro) {
-    if (this.haRecogidoElPico) {
-      if (this.sonidosActivados) {
-      var sound = this.sound.add('piedras'); 
-      sound.setVolume(0.3);
-      sound.setRate(2);
-      sound.play();
-      muro.disableBody(true, true); 
-    }
-    } else {
-      // El jugador simplemente se detiene al chocar con el muro
-      jugador.setVelocityX(0);
-      jugador.setVelocityY(0);
-    }
-  }
-
-  jugadorChocaConPinchos(jugador, pinchos) {
-    if (this.sonidosActivados) {
-    // Reproducir el sonido de choque con los pinchos
-    var sound = this.sound.add('corte');
-    sound.setVolume(0.5);
-    sound.play();
-  }
-
-    // Lógica para la muerte del jugador después de reproducir el sonido
-    jugador.setTint(0xff0000); // Cambiar el color del jugador al chocar con los pinchos
-    this.time.delayedCall(500, () => {
-      jugador.clearTint();
-      this.jugadorMuere();
-    });
-  }
-
-  jugadorMuere() {
-    // Lógica para la muerte del jugador
-    console.log("¡El jugador murió!");
-    this.scene.start("perdiste");
-  }
-
-  jugadorMuereCaida() {
-    // Lógica para la muerte del jugador
-    console.log("¡El jugador murió!");
-    this.scene.start("perdiste");
-  }
-
-  pasarDeNivel() {
-    this.scene.start("nivel2");
-  }
-
   update() {
     // Cambiar la visibilidad de la oscuridad al presionar la tecla 'L'
     if (Phaser.Input.Keyboard.JustDown(this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.L))) {
+      if (this.luzPuedeEncenderse) {
       this.luzEncendida = !this.luzEncendida; // Cambia el estado de la luz encendida
       
       if (this.sonidosActivados) {
@@ -292,7 +257,24 @@ export default class Nivel2 extends Phaser.Scene {
         this.oscuridadActivada = true; // Activa la oscuridad
       }
     }
+  }
+  
+  // Actualizar el tiempo de luz encendida en cada fotograma
+  if (this.luzEncendida) {
+    this.tiempoLuzEncendida += this.sys.game.loop.delta;
+    const limiteTiempoLuzEncendida = 60; 
+    
+    if (this.tiempoLuzEncendida >= limiteTiempoLuzEncendida * 1000) {
+      this.luzEncendida = false; 
+      this.oscuridad.visible = true; 
+      this.oscuridadActivada = true; 
+      //this.tiempoLuzEncendida = 0; // Reinicia el contador de tiempo
+      this.luzPuedeEncenderse = false;
+  }
+}
 
+    // Actualizar contador
+    this.contadorTexto.setText(`Tiempo luz encendida: ${Math.floor(this.tiempoLuzEncendida / 1000)} segundos`);
     // Actualizar la posición de la oscuridad con respecto al jugador en cada fotograma
     this.oscuridad.setPosition(this.jugador.x, this.jugador.y);
     // Actualizar la posición de la imagen de la capa de oscuridad con respecto al jugador
@@ -366,4 +348,60 @@ export default class Nivel2 extends Phaser.Scene {
       this.jugadorMuereCaida();
     }
   }
+
+  jugadorChocaConPico(jugador, pico) {
+    pico.disableBody(true, true); // Desactiva el cuerpo físico y oculta el sprite
+    this.haRecogidoElPico = true;
+    this.imagenPicoRecogido.setVisible(true);
+  }
+
+  jugadorChocaConMuro(jugador, muro) {
+    if (this.haRecogidoElPico) {
+      if (this.sonidosActivados) {
+      var sound = this.sound.add('piedras'); 
+      sound.setVolume(0.3);
+      sound.setRate(2);
+      sound.play();
+      muro.disableBody(true, true); 
+      this.imagenPicoRecogido.setVisible(false);
+    }
+    } else {
+      // El jugador simplemente se detiene al chocar con el muro
+      jugador.setVelocityX(0);
+      jugador.setVelocityY(0);
+    }
+  }
+
+  jugadorChocaConPinchos(jugador, pinchos) {
+    if (this.sonidosActivados) {
+    // Reproducir el sonido de choque con los pinchos
+    var sound = this.sound.add('corte');
+    sound.setVolume(0.5);
+    sound.play();
+  }
+
+    // Lógica para la muerte del jugador después de reproducir el sonido
+    jugador.setTint(0xff0000); // Cambiar el color del jugador al chocar con los pinchos
+    this.time.delayedCall(500, () => {
+      jugador.clearTint();
+      this.jugadorMuere();
+    });
+  }
+
+  jugadorMuere() {
+    // Lógica para la muerte del jugador
+    console.log("¡El jugador murió!");
+    this.scene.start("perdiste");
+  }
+
+  jugadorMuereCaida() {
+    // Lógica para la muerte del jugador
+    console.log("¡El jugador murió!");
+    this.scene.start("perdiste");
+  }
+
+  pasarDeNivel() {
+    this.scene.start("nivel3");
+  }
+
 }
