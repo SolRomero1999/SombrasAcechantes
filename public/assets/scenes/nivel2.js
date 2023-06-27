@@ -49,7 +49,7 @@ export default class Nivel2 extends Phaser.Scene {
     this.jugador.setDepth(2);
 
     // Crear oscuridad 
-    const radioOscuridad = 200; // Radio del círculo de oscuridad
+    const radioOscuridad = 250; // Radio del círculo de oscuridad
     const oscuridad = this.add.graphics();
     oscuridad.fillStyle(0x000000, 1);
     oscuridad.setDepth(1);
@@ -62,7 +62,7 @@ export default class Nivel2 extends Phaser.Scene {
 
     // Crear la capa de oscuridad
     const menuImage = this.add.image (this.jugador.x, this.jugador.y, "oscuridadfija");
-    menuImage.setScale(6.5);
+    menuImage.setScale(8);
     this.menuImage = menuImage;
     menuImage.setDepth(1);
 
