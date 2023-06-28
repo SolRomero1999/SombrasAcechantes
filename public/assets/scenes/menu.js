@@ -19,7 +19,7 @@ export default class Menu extends Phaser.Scene {
     const menuImage = this.add.image(10, this.scale.height / 2, "Menu").setOrigin(0, 0.5);
     menuImage.setScale(1);
 
-    const text = this.add.text(1200, this.scale.height / 2, "JUGAR", {
+    const text = this.add.text(1200, this.scale.height / 2, "JUGAR P1", {
       fontFamily: "Arial",
       fontSize: 150,
       color: "#ffffff",

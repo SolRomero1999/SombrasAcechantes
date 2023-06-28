@@ -339,7 +339,7 @@ export default class Nivel1 extends Phaser.Scene {
     }
 
     // Verificar la distancia recorrida sin tocar ninguna plataforma
-    const distanciaMaximaSinPlataforma = 3000; // Distancia máxima sin tocar plataformas
+    const distanciaMaximaSinPlataforma = 20000; // Distancia máxima sin tocar plataformas
     if (this.distanciaRecorridaY >= distanciaMaximaSinPlataforma && !this.jugador.body.blocked.down) {
       this.jugadorMuereCaida();
     }
