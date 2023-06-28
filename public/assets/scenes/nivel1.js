@@ -135,11 +135,16 @@ export default class Nivel1 extends Phaser.Scene {
     this.info.setDepth(2);
     this.info.setInteractive(); 
 
+    this.señalar = this.add.text(spawnPointInfo.x-200, spawnPointInfo.y-10, 'Aprende a jugar>>>', { fontFamily: 'Arial', fontSize: 20, color: '#ffffff' });
+    this.señalar.setDepth(2);
+    this.señalar.setVisible(true);
+
     const consejos = ["consejo1", "consejo2", "consejo3", "consejo4", "consejo5"];
     let consejoIndex = 0;
     let consejoActual;
     
     this.info.on("pointerdown", () => {
+      this.señalar.setVisible(false);
       if (this.sonidosActivados) {
       this.sound.play("click");
     }

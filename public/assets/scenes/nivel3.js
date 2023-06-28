@@ -230,6 +230,7 @@ export default class Nivel3 extends Phaser.Scene {
     this.imagenPicoRecogido = this.add.image(game.config.width - 20, game.config.height - 20, 'pico').setOrigin(1);
     this.imagenPicoRecogido.setVisible(false);
     this.imagenPicoRecogido.setDepth(2);
+    this.imagenPicoRecogido.setScrollFactor(0);
 
     // Condición para pasar de nivel
     this.physics.add.overlap(this.jugador, this.salida, this.pasardeNivel, null, this);
