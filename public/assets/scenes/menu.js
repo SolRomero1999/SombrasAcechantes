@@ -16,8 +16,8 @@ export default class Menu extends Phaser.Scene {
       this.game.menuMusic.play({ loop: true });
     }
 
-    const menuImage = this.add.image(10, this.scale.height / 2, "Menu").setOrigin(0, 0.5);
-    menuImage.setScale(1);
+    const menuImage = this.add.image(75, this.scale.height / 2, "Menu").setOrigin(0, 0.5);
+    menuImage.setScale(1.1);
 
     const text = this.add.text(1200, this.scale.height / 2, "JUGAR", {
       fontFamily: "Arial",
