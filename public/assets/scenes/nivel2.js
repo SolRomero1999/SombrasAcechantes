@@ -1,6 +1,7 @@
 export default class Nivel2 extends Phaser.Scene {
   constructor() {
-    super("nivel2");
+    super({ key: 'nivel2' });
+    this.oscuridadActivada = true;
     this.sonidosActivados = true;
   }
 
@@ -24,8 +25,9 @@ export default class Nivel2 extends Phaser.Scene {
     plataformaLayer.setCollisionByProperty({ colision: true });
     
     this.luzEncendida = false;
-
     this.tiempoLuzEncendida = 0;
+    this.luzPuedeEncenderse = true;
+    this.distanciaRecorridaY = 0; 
 
     this.contadorTexto = this.add.text(10, 10, 'Tiempo luz encendida: 0', { fontFamily: 'Arial', fontSize: 20, color: '#ffffff' });
     this.contadorTexto.setDepth(2);
@@ -34,10 +36,6 @@ export default class Nivel2 extends Phaser.Scene {
     this.maximoTiempoTexto = this.add.text(10, 40, 'Tiempo de uso de luz máximo: 60 segundos', { fontFamily: 'Arial', fontSize: 20, color: '#ffffff' });
     this.maximoTiempoTexto.setDepth(2);
     this.maximoTiempoTexto.setScrollFactor(0);
-
-    this.luzPuedeEncenderse = true;
-
-    this.distanciaRecorridaY = 0; // Variable para almacenar la distancia recorrida en el eje y
 
     // Crear al jugador
     const spawnPoint = map.findObject("objetos", (obj) => obj.name === "jugador");
@@ -49,7 +47,7 @@ export default class Nivel2 extends Phaser.Scene {
     this.jugador.setDepth(2);
 
     // Crear oscuridad 
-    const radioOscuridad = 250; // Radio del círculo de oscuridad
+    const radioOscuridad = 250; 
     const oscuridad = this.add.graphics();
     oscuridad.fillStyle(0x000000, 1);
     oscuridad.setDepth(1);
@@ -215,7 +213,6 @@ export default class Nivel2 extends Phaser.Scene {
     this.sonido.setDepth(2);
     this.sonido.setInteractive(); 
     this.sonido.on("pointerdown", () => {
-      // Invertir el estado de los sonidos
       this.sonidosActivados = !this.sonidosActivados;
       this.sound.play("click");
     });
@@ -392,13 +389,13 @@ export default class Nivel2 extends Phaser.Scene {
   jugadorMuere() {
     // Lógica para la muerte del jugador
     console.log("¡El jugador murió!");
-    this.scene.start("perdiste");
+    this.scene.start("perdiste", { escenaAnterior: "nivel2" });
   }
 
   jugadorMuereCaida() {
     // Lógica para la muerte del jugador
     console.log("¡El jugador murió!");
-    this.scene.start("perdiste");
+    this.scene.start("perdiste", { escenaAnterior: "nivel2" });
   }
 
   pasarDeNivel() {
