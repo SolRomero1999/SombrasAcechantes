@@ -244,7 +244,7 @@ export default class Nivel2 extends Phaser.Scene {
       if (this.sonidosActivados) {
         // Reproducir el sonido
         this.sound.play('encendido');
-        this.sound.setVolume(0.1);
+        this.sound.setVolume(1);
       }
 
       if (this.luzEncendida) {
@@ -267,6 +267,8 @@ export default class Nivel2 extends Phaser.Scene {
       this.oscuridad.visible = true; 
       this.oscuridadActivada = true; 
       this.luzPuedeEncenderse = false;
+      this.sound.play('encendido');
+      this.sound.setVolume(1);
   }
 }
 
@@ -364,7 +366,7 @@ export default class Nivel2 extends Phaser.Scene {
     if (this.haRecogidoElPico) {
       if (this.sonidosActivados) {
       var sound = this.sound.add('piedras'); 
-      sound.setVolume(0.3);
+      sound.setVolume(1);
       sound.setRate(2);
       sound.play();
       muro.disableBody(true, true); 
@@ -381,7 +383,7 @@ export default class Nivel2 extends Phaser.Scene {
     if (this.sonidosActivados) {
     // Reproducir el sonido de choque con los pinchos
     var sound = this.sound.add('corte');
-    sound.setVolume(0.5);
+    sound.setVolume(1);
     sound.play();
   }
 
@@ -405,9 +407,7 @@ export default class Nivel2 extends Phaser.Scene {
       this.caida.setDepth(2);
     }
     this.jugador.anims.play('caida', true);
-    setTimeout(() => {
-      this.scene.start("perdiste", { escenaAnterior: "nivel2" });
-    }, 500);
+    this.scene.start("perdiste", { escenaAnterior: "nivel2" });
   }
 
   pasarDeNivel() {

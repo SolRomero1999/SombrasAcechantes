@@ -250,7 +250,7 @@ export default class Nivel3 extends Phaser.Scene {
       if (this.sonidosActivados) {
         // Reproducir el sonido
         this.sound.play('encendido');
-        this.sound.setVolume(0.1);
+        this.sound.setVolume(1);
       }
 
       if (this.luzEncendida) {
@@ -267,12 +267,13 @@ export default class Nivel3 extends Phaser.Scene {
   if (this.luzEncendida) {
     this.tiempoLuzEncendida += this.sys.game.loop.delta;
     const limiteTiempoLuzEncendida = 30; 
-    
     if (this.tiempoLuzEncendida >= limiteTiempoLuzEncendida * 1000) {
       this.luzEncendida = false; 
       this.oscuridad.visible = true; 
       this.oscuridadActivada = true; 
       this.luzPuedeEncenderse = false;
+      this.sound.play('encendido');
+      this.sound.setVolume(1);
   }
 }
 
@@ -367,7 +368,7 @@ export default class Nivel3 extends Phaser.Scene {
     if (this.haRecogidoElPico) {
       if (this.sonidosActivados) {
       var sound = this.sound.add('piedras'); 
-      sound.setVolume(0.3);
+      sound.setVolume(1);
       sound.setRate(2);
       sound.play();
       muro.disableBody(true, true); 
@@ -384,7 +385,7 @@ export default class Nivel3 extends Phaser.Scene {
     if (this.sonidosActivados) {
     // Reproducir el sonido de choque con los pinchos
     var sound = this.sound.add('corte');
-    sound.setVolume(0.5);
+    sound.setVolume(1);
     sound.play();
   }
 
@@ -402,19 +403,8 @@ export default class Nivel3 extends Phaser.Scene {
       this.caida.setDepth(2);
     }
     this.jugador.anims.play('caida', true);
-    setTimeout(() => {
-      this.scene.start("perdiste", { escenaAnterior: "nivel3" });
-    }, 500);
+    this.scene.start("perdiste", { escenaAnterior: "nivel3" });
   }
-
-  jugadorMuereCaida() {
-    this.caida = this.add.text(this.jugador.x + 20, this.jugador.y + 20, "¡Muy alto!", { fontFamily: 'Arial', fontSize: 20, color: '#ffffff' });
-    this.caida.setDepth(2);
-    this.jugador.anims.play('caida', true);
-    setTimeout(() => {
-      this.scene.start("perdiste", { escenaAnterior: "nivel3" });
-    }, 500);
-}
 
   pasardeNivel() {
     this.scene.start("ganaste");

@@ -4,6 +4,14 @@ export default class Ganaste extends Phaser.Scene {
   }
 
   create() {
+    // Obtener referencia al objeto de música de la escena anterior
+    this.game.music = this.sound.get("musica");
+
+    // Reanuda la música si ya se estaba reproduciendo en la escena anterior
+    if (this.game.music && !this.game.music.isPlaying) {
+      this.game.music.play();
+    }
+    
     const menuImage = this.add.image(10, this.scale.height / 2, "ganaste").setOrigin(0, 0.5);
     menuImage.setScale(1);
 

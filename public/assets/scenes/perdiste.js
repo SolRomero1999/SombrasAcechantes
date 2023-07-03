@@ -4,16 +4,13 @@ export default class Perdiste extends Phaser.Scene {
   }
 
   create() {
-    // Detén la música del menú si se estaba reproduciendo
-    if (this.game.menuMusic && this.game.menuMusic.isPlaying) {
-      this.game.menuMusic.stop();
+    // Obtener referencia al objeto de música de la escena anterior
+    this.game.music = this.sound.get("musica");
+
+    // Reanuda la música si ya se estaba reproduciendo en la escena anterior
+    if (this.game.music && !this.game.music.isPlaying) {
+      this.game.music.play();
     }
-
-    // Carga el archivo de música adicional
-    this.musicPerdiste = this.sound.add("susurros");
-
-    // Reproduce la música en bucle
-    this.musicPerdiste.play({ loop: true });
 
     const menuImage = this.add.image(10, this.scale.height / 2, "perdiste").setOrigin(0, 0.5);
     menuImage.setScale(1);
@@ -21,7 +18,6 @@ export default class Perdiste extends Phaser.Scene {
     // Agregar evento de teclado para reiniciar la escena anterior al presionar la tecla "R"
     this.input.keyboard.on('keydown-R', () => {
       this.sound.play("click");
-      this.musicPerdiste.stop(); // Detiene la música de "perdiste" antes de cambiar de escena
       this.scene.start(this.scene.settings.data.escenaAnterior);
     });
 
