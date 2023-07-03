@@ -32,7 +32,7 @@ export default class Nivel1 extends Phaser.Scene {
     this.contadorTexto = this.add.text(10, 10, 'Tiempo luz encendida: 0', { fontFamily: 'Arial', fontSize: 20, color: '#ffffff' });
     this.contadorTexto.setDepth(2);
 
-    this.maximoTiempoTexto = this.add.text(10, 40, 'Tiempo de uso de luz máximo: 60 segundos', { fontFamily: 'Arial', fontSize: 20, color: '#ffffff' });
+    this.maximoTiempoTexto = this.add.text(10, 40, 'Tiempo de uso de luz máximo: 30 segundos', { fontFamily: 'Arial', fontSize: 20, color: '#ffffff' });
     this.maximoTiempoTexto.setDepth(2);
 
     // Crear al jugador
@@ -254,13 +254,12 @@ export default class Nivel1 extends Phaser.Scene {
   // Actualizar el tiempo de luz encendida en cada fotograma
   if (this.luzEncendida) {
     this.tiempoLuzEncendida += this.sys.game.loop.delta;
-    const limiteTiempoLuzEncendida = 60; 
+    const limiteTiempoLuzEncendida = 30; 
     
     if (this.tiempoLuzEncendida >= limiteTiempoLuzEncendida * 1000) {
       this.luzEncendida = false; 
       this.oscuridad.visible = true; 
       this.oscuridadActivada = true; 
-      //this.tiempoLuzEncendida = 0; // Reinicia el contador de tiempo
       this.luzPuedeEncenderse = false;
   }
 }
