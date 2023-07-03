@@ -400,13 +400,15 @@ export default class Nivel2 extends Phaser.Scene {
   }
 
   jugadorMuereCaida() {
-    this.caida = this.add.text(this.jugador.x + 20, this.jugador.y + 20, "¡Muy alto!", { fontFamily: 'Arial', fontSize: 20, color: '#ffffff' });
-    this.caida.setDepth(2);
+    if (!this.caida) { 
+      this.caida = this.add.text(this.jugador.x + 20, this.jugador.y + 20, "¡Muy alto!", { fontFamily: 'Arial', fontSize: 20, color: '#ffffff' });
+      this.caida.setDepth(2);
+    }
     this.jugador.anims.play('caida', true);
     setTimeout(() => {
       this.scene.start("perdiste", { escenaAnterior: "nivel2" });
     }, 500);
-}
+  }
 
   pasarDeNivel() {
     this.scene.start("nivel3");

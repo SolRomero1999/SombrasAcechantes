@@ -396,9 +396,12 @@ export default class Nivel3 extends Phaser.Scene {
     });
   }
 
-  jugadorMuere() {
-    // Lógica para la muerte del jugador
-    console.log("¡El jugador murió!");
+  jugadorMuereCaida() {
+    if (!this.caida) { 
+      this.caida = this.add.text(this.jugador.x + 20, this.jugador.y + 20, "¡Muy alto!", { fontFamily: 'Arial', fontSize: 20, color: '#ffffff' });
+      this.caida.setDepth(2);
+    }
+    this.jugador.anims.play('caida', true);
     setTimeout(() => {
       this.scene.start("perdiste", { escenaAnterior: "nivel3" });
     }, 500);

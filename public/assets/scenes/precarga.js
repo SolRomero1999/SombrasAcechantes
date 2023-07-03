@@ -119,38 +119,38 @@ export default class Precarga extends Phaser.Scene {
     this.anims.create({
       key: 'jump-left',
       frames: this.anims.generateFrameNumbers('salto', { start: 0, end: 2 }),
-      frameRate: 10,
-      repeat: -1
+      frameRate: 5,
+      repeat: 1
     });
 
     this.anims.create({
       key: 'jump-right',
       frames: this.anims.generateFrameNumbers('salto', { start: 3, end: 5 }),
-      frameRate: 10,
-      repeat: -1
+      frameRate: 5,
+      repeat: 1
     });
     
 
     this.anims.create({
       key: 'jump-left-L',
       frames: this.anims.generateFrameNumbers('saltoluz', { start: 0, end: 2 }),
-      frameRate: 10,
-      repeat: -1
+      frameRate: 5,
+      repeat: 1
     });
 
     this.anims.create({
       key: 'jump-right-L',
       frames: this.anims.generateFrameNumbers('saltoluz', { start: 3, end: 5 }),
-      frameRate: 10,
-      repeat: -1
+      frameRate: 5,
+      repeat: 1
     });
 
 
     this.anims.create({
       key: 'caida',
       frames: this.anims.generateFrameNumbers('caida', { start: 0, end: 2 }),
-      frameRate: 10,
-      repeat: -1
+      frameRate: 5,
+      repeat: 1
     });
 
     // Iniciar escena "menu"
