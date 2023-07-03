@@ -45,8 +45,16 @@ export default class Precarga extends Phaser.Scene {
     this.load.image("flecha", "./public/assets/images/flecha.png");
     this.load.image("oscuridadfija", "./public/assets/images/fijo.png");
     this.load.spritesheet("salto", "./public/assets/images/salto.png", {
-      frameWidth: 340,
-      frameHeight: 438,
+      frameWidth: 397,
+      frameHeight: 465,
+    });
+    this.load.spritesheet("saltoluz", "./public/assets/images/saltoluz.png", {
+      frameWidth: 374,
+      frameHeight: 465,
+    });
+    this.load.spritesheet("caida", "./public/assets/images/caida.png", {
+      frameWidth: 353,
+      frameHeight: 411,
     });
     this.load.spritesheet("dude", "./public/assets/images/personaje.png", {
       frameWidth: 353,
@@ -110,14 +118,37 @@ export default class Precarga extends Phaser.Scene {
     // Animación de salto luz apagada
     this.anims.create({
       key: 'jump-left',
-      frames: this.anims.generateFrameNumbers('salto', { start: 0, end: 4 }),
+      frames: this.anims.generateFrameNumbers('salto', { start: 0, end: 2 }),
       frameRate: 10,
       repeat: -1
     });
 
     this.anims.create({
       key: 'jump-right',
-      frames: this.anims.generateFrameNumbers('salto', { start: 5, end: 10 }),
+      frames: this.anims.generateFrameNumbers('salto', { start: 3, end: 5 }),
+      frameRate: 10,
+      repeat: -1
+    });
+    
+
+    this.anims.create({
+      key: 'jump-left-L',
+      frames: this.anims.generateFrameNumbers('saltoluz', { start: 0, end: 2 }),
+      frameRate: 10,
+      repeat: -1
+    });
+
+    this.anims.create({
+      key: 'jump-right-L',
+      frames: this.anims.generateFrameNumbers('saltoluz', { start: 3, end: 5 }),
+      frameRate: 10,
+      repeat: -1
+    });
+
+
+    this.anims.create({
+      key: 'caida',
+      frames: this.anims.generateFrameNumbers('caida', { start: 0, end: 2 }),
       frameRate: 10,
       repeat: -1
     });

@@ -273,14 +273,14 @@ export default class Nivel1 extends Phaser.Scene {
     this.menuImage.setPosition(this.jugador.x, this.jugador.y);
 
     if (this.cursors.left.isDown) {
-      this.jugador.setVelocityX(-160);
+      this.jugador.setVelocityX(-200);
       if (this.luzEncendida) {
         this.jugador.anims.play('left-luzEncendida', true);
       } else {
         this.jugador.anims.play('left', true);
       }
     } else if (this.cursors.right.isDown) {
-      this.jugador.setVelocityX(160);
+      this.jugador.setVelocityX(200);
       if (this.luzEncendida) {
         this.jugador.anims.play('right-luzEncendida', true);
       } else {
@@ -296,13 +296,21 @@ export default class Nivel1 extends Phaser.Scene {
     }
 
     if (this.cursors.up.isDown && this.jugador.body.blocked.down) {
-      this.jugador.setVelocityY(-250); // Ajustar este valor para aumentar la altura del salto
+      this.jugador.setVelocityY(-250); 
       if (this.cursors.left.isDown) {
-        this.jugador.anims.play('jump-left', true);
+        if (this.luzEncendida) {
+          this.jugador.anims.play('jump-left-L', true);
+        } else {
+          this.jugador.anims.play('jump-left', true);
+        }
       } else if (this.cursors.right.isDown) {
-        this.jugador.anims.play('jump-right', true);
+        if (this.luzEncendida) {
+          this.jugador.anims.play('jump-right-L', true);
+        } else {
+          this.jugador.anims.play('jump-right', true);
+        }
       }
-    }
+    }    
 
     // Verificar si el jugador está en contacto con el carrito
     if (this.physics.overlap(this.jugador, this.carrito)) {
@@ -387,13 +395,12 @@ export default class Nivel1 extends Phaser.Scene {
   }
 
   jugadorMuereCaida() {
-    // Lógica para la muerte del jugador
-    console.log("¡El jugador murió!");
-    this.scene.start("perdiste", { escenaAnterior: "nivel1" });
-  }
-
+    console.log("¡El jugador murió!")
+    this.jugador.anims.play('caida', true);
+      this.scene.start("perdiste", { escenaAnterior: "nivel1" });
+    }
+  
   pasarDeNivel() {
     this.scene.start("nivel2");
   }
-
 }

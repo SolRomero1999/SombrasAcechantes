@@ -308,13 +308,21 @@ export default class Nivel3 extends Phaser.Scene {
     }
 
     if (this.cursors.up.isDown && this.jugador.body.blocked.down) {
-      this.jugador.setVelocityY(-250);
+      this.jugador.setVelocityY(-250); 
       if (this.cursors.left.isDown) {
-        this.jugador.anims.play('jump-left', true);
+        if (this.luzEncendida) {
+          this.jugador.anims.play('jump-left-L', true);
+        } else {
+          this.jugador.anims.play('jump-left', true);
+        }
       } else if (this.cursors.right.isDown) {
-        this.jugador.anims.play('jump-right', true);
+        if (this.luzEncendida) {
+          this.jugador.anims.play('jump-right-L', true);
+        } else {
+          this.jugador.anims.play('jump-right', true);
+        }
       }
-    }
+    } 
 
     if (this.physics.overlap(this.jugador, this.carritos)) {
       this.jugadorEnContactoConCarrito = true;
@@ -325,9 +333,9 @@ export default class Nivel3 extends Phaser.Scene {
     if (this.jugadorEnContactoConCarrito) {
       this.carritos.getChildren().forEach((carrito) => {
         if (this.cursors.left.isDown) {
-          carrito.setVelocityX(-160);
+          carrito.setVelocityX(-200);
         } else if (this.cursors.right.isDown) {
-          carrito.setVelocityX(160);
+          carrito.setVelocityX(200);
         } else {
           carrito.setVelocityX(0);
         }
@@ -398,6 +406,7 @@ export default class Nivel3 extends Phaser.Scene {
   jugadorMuereCaida() {
     // Lógica para la muerte del jugador
     console.log("¡El jugador murió!");
+    this.jugador.anims.play('caida', true);
     this.scene.start("perdiste", { escenaAnterior: "nivel3" });
   }
 
