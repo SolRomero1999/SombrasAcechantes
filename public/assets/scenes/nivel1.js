@@ -374,13 +374,16 @@ export default class Nivel1 extends Phaser.Scene {
   }
 
   jugadorChocaConPinchos(jugador, pinchos) {
-    if (this.sonidosActivados) {
-    // Reproducir el sonido de choque con los pinchos
-    var sound = this.sound.add('corte');
-    sound.setVolume(1);
-    sound.play();
-  }
-
+    if (!this.sonidoCorteReproducido) {
+      // Reproducir el sonido de choque con los pinchos
+      var sound = this.sound.add('corte');
+      sound.setVolume(1);
+      sound.play();
+  
+      // Marcar el sonido como reproducido
+      this.sonidoCorteReproducido = true;
+    }
+  
     // Lógica para la muerte del jugador después de reproducir el sonido
     jugador.setTint(0xff0000); // Cambiar el color del jugador al chocar con los pinchos
     this.time.delayedCall(500, () => {
