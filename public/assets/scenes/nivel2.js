@@ -349,7 +349,7 @@ export default class Nivel2 extends Phaser.Scene {
     }
 
     // Verificar la distancia recorrida sin tocar ninguna plataforma
-    const distanciaMaximaSinPlataforma = 40000; // Distancia máxima sin tocar plataformas
+    const distanciaMaximaSinPlataforma = 30000; // Distancia máxima sin tocar plataformas
     if (this.distanciaRecorridaY >= distanciaMaximaSinPlataforma && !this.jugador.body.blocked.down) {
       this.jugadorMuereCaida();
     }
@@ -406,7 +406,7 @@ export default class Nivel2 extends Phaser.Scene {
     this.jugador.anims.play('caida', true);
     setTimeout(() => {
       this.scene.start("perdiste", { escenaAnterior: "nivel2" });
-    }, 2000);
+    }, 1000);
   }
 
   pasarDeNivel() {
