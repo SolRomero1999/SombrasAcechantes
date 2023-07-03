@@ -350,7 +350,7 @@ export default class Nivel3 extends Phaser.Scene {
       this.distanciaRecorridaY = 0;
     }
 
-    const distanciaMaximaSinPlataforma = 27000;
+    const distanciaMaximaSinPlataforma = 25000;
     if (this.distanciaRecorridaY >= distanciaMaximaSinPlataforma && !this.jugador.body.blocked.down) {
       this.jugadorMuereCaida();
     }
@@ -404,6 +404,7 @@ export default class Nivel3 extends Phaser.Scene {
     // Lógica para la muerte del jugador
     console.log("¡El jugador murió!");
     this.scene.start("perdiste", { escenaAnterior: "nivel3" });
+    this.sonidoCorteReproducido = false;
   }
 
   jugadorMuereCaida() {
