@@ -350,7 +350,7 @@ export default class Nivel3 extends Phaser.Scene {
       this.distanciaRecorridaY = 0;
     }
 
-    const distanciaMaximaSinPlataforma = 30000;
+    const distanciaMaximaSinPlataforma = 27000;
     if (this.distanciaRecorridaY >= distanciaMaximaSinPlataforma && !this.jugador.body.blocked.down) {
       this.jugadorMuereCaida();
     }
@@ -402,15 +402,17 @@ export default class Nivel3 extends Phaser.Scene {
     console.log("¡El jugador murió!");
     setTimeout(() => {
       this.scene.start("perdiste", { escenaAnterior: "nivel3" });
-    }, 1000);
+    }, 500);
   }
 
   jugadorMuereCaida() {
-    // Lógica para la muerte del jugador
-    console.log("¡El jugador murió!");
+    this.caida = this.add.text(this.jugador.x + 20, this.jugador.y + 20, "¡Muy alto!", { fontFamily: 'Arial', fontSize: 20, color: '#ffffff' });
+    this.caida.setDepth(2);
     this.jugador.anims.play('caida', true);
-    this.scene.start("perdiste", { escenaAnterior: "nivel3" });
-  }
+    setTimeout(() => {
+      this.scene.start("perdiste", { escenaAnterior: "nivel3" });
+    }, 500);
+}
 
   pasardeNivel() {
     this.scene.start("ganaste");

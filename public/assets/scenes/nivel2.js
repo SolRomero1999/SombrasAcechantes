@@ -349,7 +349,7 @@ export default class Nivel2 extends Phaser.Scene {
     }
 
     // Verificar la distancia recorrida sin tocar ninguna plataforma
-    const distanciaMaximaSinPlataforma = 30000; // Distancia máxima sin tocar plataformas
+    const distanciaMaximaSinPlataforma = 27000; // Distancia máxima sin tocar plataformas
     if (this.distanciaRecorridaY >= distanciaMaximaSinPlataforma && !this.jugador.body.blocked.down) {
       this.jugadorMuereCaida();
     }
@@ -401,13 +401,13 @@ export default class Nivel2 extends Phaser.Scene {
   }
 
   jugadorMuereCaida() {
-    // Lógica para la muerte del jugador
-    console.log("¡El jugador murió!");
+    this.caida = this.add.text(this.jugador.x + 20, this.jugador.y + 20, "¡Muy alto!", { fontFamily: 'Arial', fontSize: 20, color: '#ffffff' });
+    this.caida.setDepth(2);
     this.jugador.anims.play('caida', true);
     setTimeout(() => {
       this.scene.start("perdiste", { escenaAnterior: "nivel2" });
-    }, 1000);
-  }
+    }, 500);
+}
 
   pasarDeNivel() {
     this.scene.start("nivel3");
