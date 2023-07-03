@@ -405,7 +405,9 @@ export default class Nivel1 extends Phaser.Scene {
       this.caida.setDepth(2);
     }
     this.jugador.anims.play('caida', true);
-    this.scene.start("perdiste", { escenaAnterior: "nivel1" });    
+    setTimeout(() => {
+      this.scene.start("perdiste", { escenaAnterior: "nivel1" });
+    }, 500);
   }
   
   pasarDeNivel() {
