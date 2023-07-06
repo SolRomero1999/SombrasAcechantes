@@ -1,6 +1,6 @@
 # Sombras Acechantes
 
-Videojuego de plataformas en el que somos un niño llamado Lumiere, quien termino por perderse en unas cuevas mineras y ahora deberá hallar la manera de salir contando únicamente con una vela. 
+Videojuego de plataformas donde acompañas a Lumiere, un niño perdido en cuevas mineras, y debes ayudarlo a encontrar la salida utilizando solo una vela como fuente de luz. 
 
-https://docs.google.com/document/d/1gK9O5x1Zv9RQL1nYr0OwRRAnFpCnPkdc1ad2H-IshVI/edit?usp=sharing 
-Link al TDD
+https://drive.google.com/drive/folders/1OdCuIzQBiC98Pi2n76w9Qc8Jp1dNcFHb?usp=sharing
+Carpeta con TDD y GDD
